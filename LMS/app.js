@@ -10,6 +10,8 @@ const Module = require('./routes/Module');
 const Enroll = require('./routes/Enroll');
 const db = require("./db");
 const isAuth = require("./Middleware/isAuth");
+const { logger, logEvents } =  require("./Middleware/logger");
+const errorHandler = require('./middleware/errorHandler')
 const AdminRoutes = require("./routes/Admin");
 const JobRoutes = require("./routes/Jobportal");
 const Insights = require("./routes/insights");
@@ -30,6 +32,8 @@ const TimeTable=require("./routes/Timetable");
 
 
 app.use(isAuth);
+app.use(logger);
+app.use(errorHandler);
 app.use(BodyParser.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(BodyParser.json());
@@ -83,6 +87,7 @@ app.use("/exMarks" , ExMarkRoutes);
 db.initDb((err, db) => {
   if (err) {
     console.log(err);
+    logEvents(`${err.no}: ${err.code}\t${err.syscall}\t${err.hostname}`, 'mongoErrLog.log')
   } else {
     app.listen(5000);
   }

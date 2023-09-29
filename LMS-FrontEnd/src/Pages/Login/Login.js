@@ -5,14 +5,22 @@ import axios from "axios";
 import { useDispatch } from "react-redux";
 import { login } from "../../Store/auth";
 import { useHistory } from "react-router";
+import DescriptionAlerts from "../../Components/alertMsg/Alert";
 
 const Login = () => {
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
   const [unAuth, setUnAuth] = useState(false);
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [severity, setSeverity] = useState('')
+  const [alertMessage, setAlertMessage] = useState('')
 
   const dispatch = useDispatch();
   const history = useHistory();
+
+  const handleCloseSnackbar = () => {
+    setOpenSnackbar(false);
+};
 
   const submitHandler = (event) => {
     event.preventDefault();
@@ -46,7 +54,10 @@ const Login = () => {
         }
       })
       .catch((er) => {
-        console.log(er);
+        console.log(er?.response);
+        setAlertMessage(er?.response?.data?.message)
+        setSeverity('error')
+        setOpenSnackbar(true)
       });
   };
   const emailhandler = (event) => {
@@ -59,6 +70,7 @@ const Login = () => {
   };
   return (
     <div className={classes.login_container}>
+      <DescriptionAlerts openSnackbar={openSnackbar} handleCloseSnackbar={handleCloseSnackbar} severity={severity} alertMessage={alertMessage} />
       <div className={classes.login}>
         <h2 className={classes.title}>Log In</h2>
         <form onSubmit={submitHandler} className={classes.form_container}>
