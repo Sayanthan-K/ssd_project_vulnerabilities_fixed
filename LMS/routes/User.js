@@ -8,6 +8,10 @@ const loginLimiter = require('../Middleware/loginLimiter')
 
 router.post("/login",loginLimiter, Profile.Login);
 
+router.get("/refresh", Profile.refresh);
+
+router.post("/logout", Profile.logout);
+
 router.get("/check_mail/", Profile.CheckMail);
 
 router.post("/check_otp", Profile.CheckOTP);

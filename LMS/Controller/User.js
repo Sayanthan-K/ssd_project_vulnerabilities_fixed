@@ -1,13 +1,14 @@
- const mongodb = require("mongodb");
+const mongodb = require("mongodb");
 const db = require("../db");
 const fileUpload = require("express-fileupload");
 const jwt = require("jsonwebtoken");
 const e = require("express");
+const cookie = require('cookie');
 
-const nodemailer=require('nodemailer');
+const nodemailer = require('nodemailer');
 
 
-const sendEmail = (otp,email) => {
+const sendEmail = (otp, email) => {
   const h1 = "<h2>OTP for reset password</h2><hr>";
   const h2 = h1 + "<h3>OTP: " + otp + "</h3>";
 
@@ -48,17 +49,38 @@ exports.Login = (req, res, next) => {
     })
     .then((resp) => {
       if (resp) {
-        const token = jwt.sign(
+        const accessToken = jwt.sign(
           { userID: resp._id, email: resp.email },
-          "lmsuservalidation",
-          { expiresIn: "1h" }
+          process.env.ACCESS_TOKEN_SECRET,
+          { expiresIn: '1m' }
         );
-        res.status(200).json({
+        res.cookie('jwtAcc', accessToken, {
+          httpOnly: true,
+          secure: true,
+          sameSite: 'strict',
+          maxAge: 7 * 24 * 60 * 1000,
+        })
+
+        const refreshToken = jwt.sign(
+          { userID: resp._id,email: resp.email, password:resp.password},
+          process.env.REFRESH_TOKEN_SECRET,
+          { expiresIn: '3m' }
+        )
+
+        res.cookie('jwt', refreshToken, {
+          httpOnly: true,
+          secure: true,
+          sameSite: 'strict',
+          maxAge: 7 * 24 * 60 * 1000,
+        })
+
+        return res.status(200).json({
           auth: true,
           details: resp,
-          token: token,
+          token: accessToken,
           tokenExpiration: 1,
         });
+
       } else {
         res.status(200).json({ auth: false });
       }
@@ -67,6 +89,70 @@ exports.Login = (req, res, next) => {
       res.status(200).json({ auth: false });
     });
 };
+
+
+exports.refresh = (req, res) => {
+  const cookies = cookie.parse(req.headers.cookie || '');
+
+  if (!cookies?.jwt) return res.status(401).json({ message: 'unauthorized' })
+
+  const refreshToken = cookies.jwt
+
+  jwt.verify(
+    refreshToken,
+    process.env.REFRESH_TOKEN_SECRET,
+    async (err, decoded) => {
+      if (err) return res.status(403).json({ message: 'Forbidden' })
+
+      db.getDb()
+        .db()
+        .collection("User")
+        .findOne({
+          email: decoded.email,
+          password: decoded.password,
+        })
+        .then((resp) => {
+          if (resp) {
+            const accessToken = jwt.sign(
+              { userID: resp._id, email: resp.email },
+              process.env.ACCESS_TOKEN_SECRET,
+              { expiresIn: '1m' }
+            );
+
+            res.cookie('jwtAcc', accessToken, {
+              httpOnly: true,
+              secure: true,
+              sameSite: 'strict',
+              maxAge: 7 * 24 * 60 * 1000
+            })
+
+            res.status(200).json({
+              auth: true,
+              details: resp,
+              token: accessToken,
+              tokenExpiration: 1,
+            });
+          } else {
+            res.status(200).json({ auth: false });
+          }
+        })
+        .catch(() => {
+          res.status(200).json({ auth: false });
+        });
+    })
+}
+
+
+exports.logout = (req, res) => {
+  const cookies = cookie.parse(req.headers.cookie || '');
+  if (!cookies?.jwt) return res.sendStatus(204)
+  res.clearCookie('jwt', { httpOnly: true, sameSite: 'strict', secure: true })
+  res.clearCookie('jwtAcc', { httpOnly: true, sameSite: 'strict', secure: true })
+  console.log("cookie cleared")
+  return res(200).json({ message: 'cookie cleared' })
+}
+
+
 
 exports.CheckMail = (req, res, next) => {
   db.getDb()
@@ -78,8 +164,8 @@ exports.CheckMail = (req, res, next) => {
       if (resp) {
         const userID = resp._id;
 
-      
-  
+
+
         const OTP = Math.floor(Math.random() * 89999) + 10000;
         db.getDb()
           .db()
@@ -87,7 +173,7 @@ exports.CheckMail = (req, res, next) => {
           .insertOne({ userID, email: req.query.email, OTP: OTP })
           .then((resp) => {
 
-            sendEmail(OTP,req.query.email);
+            sendEmail(OTP, req.query.email);
 
             res.status(200).json({ available: true, userID });
           });
@@ -112,7 +198,7 @@ exports.CheckOTP = (req, res, next) => {
         res.status(200).json({ valid: false });
       }
     })
-    .catch(() => {});
+    .catch(() => { });
 };
 
 exports.FindUser = (req, res, next) => {
@@ -129,7 +215,7 @@ exports.FindUser = (req, res, next) => {
         res.status(200).json({ auth: false });
       }
     })
-    .catch(() => {});
+    .catch(() => { });
 };
 
 exports.GetUser = (req, res, next) => {
@@ -349,7 +435,7 @@ exports.Unenroll = (req, res, next) => {
       },
 
 
-      { $pull: { students: req.body.student },}
+      { $pull: { students: req.body.student }, }
 
     )
     .then((resp) => {

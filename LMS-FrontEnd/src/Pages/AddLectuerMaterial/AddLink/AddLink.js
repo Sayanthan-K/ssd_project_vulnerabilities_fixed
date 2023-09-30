@@ -175,7 +175,6 @@ const AddLink = (props) => {
           type="text"
           id="link"
           placeholder="link.."
-          required
         />
 
         <label className={classes.labels} for="title">
@@ -190,7 +189,6 @@ const AddLink = (props) => {
           className={classes.inputs}
           id="title"
           type="text"
-          required
         />
 
         <label className={classes.labels} for="title">

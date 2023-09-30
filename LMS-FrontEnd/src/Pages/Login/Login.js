@@ -35,6 +35,8 @@ const Login = () => {
       .post("http://localhost:5000/user/login", {
         email: email,
         password: password,
+      },{
+        withCredentials: true,
       })
       .then((res) => {
         if (res.data.auth === true) {
@@ -54,7 +56,7 @@ const Login = () => {
         }
       })
       .catch((er) => {
-        console.log(er?.response);
+        console.log(er);
         setAlertMessage(er?.response?.data?.message)
         setSeverity('error')
         setOpenSnackbar(true)

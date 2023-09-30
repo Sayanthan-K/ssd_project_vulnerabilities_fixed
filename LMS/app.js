@@ -1,8 +1,9 @@
 const express = require("express");
 const cors = require("cors");
+const cookieParser = require('cookie-parser')
 const app = express();
 const BodyParser = require("body-parser");
-
+require('dotenv').config()
 
 const Faculty = require('./routes/Faculty');
 const course = require('./routes/course');
@@ -31,13 +32,33 @@ const TimeTable=require("./routes/Timetable");
 
 
 
-app.use(isAuth);
+// app.use(isAuth);
+app.use((req, res, next) => {
+  if (req.path === '/user/login' || req.path === '/user/refresh' || req.path === '/user/logout') {
+    return next(); // Skip authentication for /login route
+  }
+  isAuth(req, res, next); // Apply authMiddleware for all other routes
+});
 app.use(logger);
 app.use(errorHandler);
 app.use(BodyParser.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(BodyParser.json());
-app.use(cors());
+app.use(cookieParser())
+
+const allowedOrigins ='http://localhost:3000';
+const corsOptions = {
+  origin: function (origin, callback) {
+    if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true,
+};
+
+app.use(cors(corsOptions));
 
 app.use("/uploads", express.static("uploads"));
 app.use("/TimeTable", express.static("TimeTable"));
@@ -48,12 +69,13 @@ app.use("/files", express.static("files"));
 app.use("/announcement", express.static("announcement"));
 
 app.use((req, res, next) => {
-  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');;
   res.setHeader(
     "Access-Control-Allow-Methods",
     "GET,POST,PUT,PATCH,DELETE,OPTIONS"
   );
   res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+  res.setHeader("Access-Control-Allow-Credentials", "true")
   next();
 });
 
