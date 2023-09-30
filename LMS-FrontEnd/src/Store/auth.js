@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import axios from "axios";
 
 const initial = {
   isLogedIn: localStorage.getItem("isLogedIn"),
@@ -37,6 +38,13 @@ const authStore = createSlice({
       }, 60000 * 60);
     },
     logout(state) {
+      axios.post("http://localhost:5000/user/logout",{
+        withCredentials: true,
+      }).then((res)=>{
+        console.log(res)
+      }).catch((err)=>{
+        console.log(err)
+      })
       state.isLogedIn = false;
       state.userMail = null;
       state.type = null;

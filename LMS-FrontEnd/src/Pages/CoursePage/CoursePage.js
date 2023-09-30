@@ -23,9 +23,10 @@ const CoursePage = (props) => {
     axios
 
       .get("http://localhost:5000/course/getyear?id=" +ID,{
-        headers: { Authorization: "lmsvalidation " + token },
+        withCredentials: true,
       })
       .then((res) => {
+        console.log(res)
         if (res.data.auth === false) {
           setError("You Are not Authorized to get year !");
           setIsUploaded(false);

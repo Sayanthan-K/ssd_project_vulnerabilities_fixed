@@ -3,9 +3,14 @@ const router = Router();
 const fileUpload = require("express-fileupload");
 router.use(fileUpload());
 const Profile = require("../Controller/User");
+const loginLimiter = require('../Middleware/loginLimiter')
 
 
-router.post("/login", Profile.Login);
+router.post("/login",loginLimiter, Profile.Login);
+
+router.get("/refresh", Profile.refresh);
+
+router.post("/logout", Profile.logout);
 
 router.get("/check_mail/", Profile.CheckMail);
 

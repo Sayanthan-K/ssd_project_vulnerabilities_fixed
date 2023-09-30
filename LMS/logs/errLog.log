@@ -1,0 +1,54 @@
+20230929	19:31:04	78c45ed3-dc2e-497e-80d3-e91f9c84f425	Too many requests: Too many login attemps for this ip, please try again after a 60 seconds pause	POST	/login	http://localhost:3000
+20230929	19:31:05	50e808d4-cd5e-4b7e-b482-61608ac7438b	Too many requests: Too many login attemps for this ip, please try again after a 60 seconds pause	POST	/login	http://localhost:3000
+20230929	19:31:06	370269bd-566a-484a-b501-fa8087d45966	Too many requests: Too many login attemps for this ip, please try again after a 60 seconds pause	POST	/login	http://localhost:3000
+20230929	19:31:07	1f99ecda-0b71-4323-829a-ff4d00a12233	Too many requests: Too many login attemps for this ip, please try again after a 60 seconds pause	POST	/login	http://localhost:3000
+20230929	19:31:10	9120bb9c-cd1e-437a-8c64-c454a701049b	Too many requests: Too many login attemps for this ip, please try again after a 60 seconds pause	POST	/login	http://localhost:3000
+20230929	19:31:10	3dd2198b-18f2-4776-89b6-ccc13bc3a2ed	Too many requests: Too many login attemps for this ip, please try again after a 60 seconds pause	POST	/login	http://localhost:3000
+20230929	19:56:37	60b6c848-60ce-48a4-8620-ff8d49355255	Too many requests: Too many login attemps for this ip, please try again after a 60 seconds pause	POST	/login	http://localhost:3000
+20230929	19:58:52	e24c20de-f6a7-4e83-a41c-7cd479313943	Too many requests: Too many login attemps for this ip, please try again after a 60 seconds pause	POST	/login	http://localhost:3000
+20230929	20:05:09	17c9a87c-3b80-4e12-a7c2-28043d41633e	Too many requests: Too many login attemps for this ip, please try again after a 60 seconds pause	POST	/login	http://localhost:3000
+20230929	20:05:45	dbd2fff3-3d74-488c-be06-31303f13252f	Too many requests: Too many login attemps for this ip, please try again after a 60 seconds pause	POST	/login	http://localhost:3000
+20230929	20:08:05	d046656e-de89-4230-9f2b-0e53e7de6d7a	Too many requests: Too many login attemps for this ip, please try again after a 60 seconds pause	POST	/login	http://localhost:3000
+20230929	20:12:12	e43204ae-d9b3-4d32-b927-8ab1a0956aee	Too many requests: Too many login attemps for this ip, please try again after a 60 seconds pause	POST	/login	http://localhost:3000
+20230929	20:12:50	4f2aaf39-ad1e-402d-b4dd-557c4ac02743	Too many requests: Too many login attemps for this ip, please try again after a 60 seconds pause	POST	/login	http://localhost:3000
+20230929	20:13:33	db85c7dc-7ade-41ac-ac17-76a3ff6d0312	Too many requests: Too many login attemps for this ip, please try again after a 60 seconds pause	POST	/login	http://localhost:3000
+20230929	20:17:21	64da8c77-1767-4238-83f0-d336b39a4cc3	Too many requests: Too many login attemps for this ip, please try again after a 60 seconds pause	POST	/login	undefined
+20230929	20:19:17	7da6121d-903e-49ee-b1df-326687805873	Too many requests: Too many login attemps for this ip, please try again after a 60 seconds pause	POST	/login	http://localhost:3000
+20230929	20:24:56	9fa58e5a-04a8-4d79-af1f-b824a11a8cb3	Too many requests: Too many login attemps for this ip, please try again after a 60 seconds pause	POST	/login	http://localhost:3000
+20230929	20:25:50	baf02a35-3724-417b-b5e6-152af1b6a974	Too many requests: Too many login attemps for this ip, please try again after a 60 seconds pause	POST	/login	http://localhost:3000
+20230929	20:26:50	fd42361d-6155-4847-8fde-513223dd687c	Too many requests: Too many login attemps for this ip, please try again after a 60 seconds pause	POST	/login	http://localhost:3000
+20230929	20:26:58	a9bdedca-c99f-48c4-8bc3-c350d8f6897c	Too many requests: Too many login attemps for this ip, please try again after a 60 seconds pause	POST	/login	http://localhost:3000
+20230929	20:27:02	73da0eb5-fa6e-425e-9a22-681b1c91f88c	Too many requests: Too many login attemps for this ip, please try again after a 60 seconds pause	POST	/login	http://localhost:3000
+20230929	20:27:06	072b4864-b0b8-4073-a244-d963cfd28ad3	Too many requests: Too many login attemps for this ip, please try again after a 60 seconds pause	POST	/login	http://localhost:3000
+20230929	20:27:09	13ab3ec4-f11f-4585-b078-ea1f07d9b73c	Too many requests: Too many login attemps for this ip, please try again after a 60 seconds pause	POST	/login	http://localhost:3000
+20230929	20:27:13	d91cc10e-2c23-424b-a535-95f252724419	Too many requests: Too many login attemps for this ip, please try again after a 60 seconds pause	POST	/login	http://localhost:3000
+20230930	13:04:56	4f37c6dc-05dd-4750-9faf-1601801ed2fa	ReferenceError: cookie is not defined	POST	/user/login	undefined
+20230930	13:05:00	42340369-2ec6-4e1f-99f1-ccb16625b637	ReferenceError: cookie is not defined	GET	/user/refresh	undefined
+20230930	13:05:04	d58e4c93-e7b6-434d-944d-3364fed434c7	ReferenceError: cookie is not defined	GET	/Faculty/get_faculties	undefined
+20230930	13:06:24	e691eeb9-4e38-4081-84c6-12977c206965	ReferenceError: decodedToken is not defined	POST	/user/login	undefined
+20230930	13:09:05	5d4d41ec-30a1-4649-bc35-2152b9c25613	ReferenceError: decodedToken is not defined	POST	/user/login	undefined
+20230930	17:14:36	7401a3d8-a5f6-4e8e-b6e2-0acc6ca61b75	Too many requests: Too many login attemps for this ip, please try again after a 60 seconds pause	POST	/login	http://localhost:3000
+20230930	17:15:32	11e82ed7-4d29-4c09-a779-62fde2735dd7	Too many requests: Too many login attemps for this ip, please try again after a 60 seconds pause	POST	/login	http://localhost:3000
+20230930	17:31:04	7d5ef801-c030-4c12-b379-26a02e7d03f4	Too many requests: Too many login attemps for this ip, please try again after a 60 seconds pause	POST	/login	http://localhost:3000
+20230930	17:33:12	059798a8-0575-40a9-a651-b82a5f487a56	Too many requests: Too many login attemps for this IP, please try again after a 60 seconds pause	POST	/login	http://localhost:3000
+20230930	17:33:13	1e4ceeea-5f88-4cfa-94a5-74ccb0822533	Too many requests: Too many login attemps for this IP, please try again after a 60 seconds pause	POST	/login	http://localhost:3000
+20230930	17:33:14	15e8d1e8-f1b4-485c-bd6b-b684954b98e2	Too many requests: Too many login attemps for this IP, please try again after a 60 seconds pause	POST	/login	http://localhost:3000
+20230930	17:33:15	aaead9c0-d9a6-4b5a-8923-b2cd8e4dabe2	Too many requests: Too many login attemps for this IP, please try again after a 60 seconds pause	POST	/login	http://localhost:3000
+20230930	17:33:15	4fc2c07d-9c1c-4fa4-a0be-cc89367f0711	Too many requests: Too many login attemps for this IP, please try again after a 60 seconds pause	POST	/login	http://localhost:3000
+20230930	17:33:16	7e1f6fac-defd-49d0-9c0c-8349e3c4a51b	Too many requests: Too many login attemps for this IP, please try again after a 60 seconds pause	POST	/login	http://localhost:3000
+20230930	17:33:17	39747b40-3293-453f-9dbe-63a26d386279	Too many requests: Too many login attemps for this IP, please try again after a 60 seconds pause	POST	/login	http://localhost:3000
+20230930	17:33:17	7639c24f-7ecc-450b-bb2d-f9ae35806283	Too many requests: Too many login attemps for this IP, please try again after a 60 seconds pause	POST	/login	http://localhost:3000
+20230930	17:33:18	bbd10ed9-9fe0-495b-9cfb-57af155e6ccf	Too many requests: Too many login attemps for this IP, please try again after a 60 seconds pause	POST	/login	http://localhost:3000
+20230930	17:33:19	c5d1ae99-9b37-42ea-beb5-b71408d33151	Too many requests: Too many login attemps for this IP, please try again after a 60 seconds pause	POST	/login	http://localhost:3000
+20230930	17:33:19	8bfa38ee-3dd5-4090-a997-d8d1ae03c3e3	Too many requests: Too many login attemps for this IP, please try again after a 60 seconds pause	POST	/login	http://localhost:3000
+20230930	17:33:20	960ab883-1d2f-4332-9161-0d3a246e1d44	Too many requests: Too many login attemps for this IP, please try again after a 60 seconds pause	POST	/login	http://localhost:3000
+20230930	17:33:21	c77496da-8371-4db5-8f76-15db18deca5b	Too many requests: Too many login attemps for this IP, please try again after a 60 seconds pause	POST	/login	http://localhost:3000
+20230930	17:33:22	93fd0e7f-760e-41ff-a51b-ac25fa6c631d	Too many requests: Too many login attemps for this IP, please try again after a 60 seconds pause	POST	/login	http://localhost:3000
+20230930	17:33:22	fa732571-e1c3-47f8-b8e2-ada381bffb18	Too many requests: Too many login attemps for this IP, please try again after a 60 seconds pause	POST	/login	http://localhost:3000
+20230930	17:33:23	02c981f1-a84a-4239-ae84-c13d33733230	Too many requests: Too many login attemps for this IP, please try again after a 60 seconds pause	POST	/login	http://localhost:3000
+20230930	17:33:24	2a4d317a-e75e-4daf-aee2-640bfd9adb29	Too many requests: Too many login attemps for this IP, please try again after a 60 seconds pause	POST	/login	http://localhost:3000
+20230930	17:34:59	74551f9c-cbc6-44c5-9768-da9263dcc509	Too many requests: Too many login attemps for this IP, please try again after a 60 seconds pause	POST	/login	http://localhost:3000
+20230930	17:35:01	63df1a5f-f944-4cad-bacd-a1cbca1df8c0	Too many requests: Too many login attemps for this IP, please try again after a 60 seconds pause	POST	/login	http://localhost:3000
+20230930	17:35:20	365810e9-0faa-4995-92da-8b0931aaecb0	Too many requests: Too many login attemps for this IP, please try again after a 60 seconds pause	POST	/login	http://localhost:3000
+20230930	17:35:27	522e8770-0ee3-4802-ba77-35d359c5acdc	Too many requests: Too many login attemps for this IP, please try again after a 60 seconds pause	POST	/login	http://localhost:3000
+20230930	17:35:51	614b8dd2-d1f5-4191-9091-72cdf3bbeb46	Too many requests: Too many login attemps for this IP, please try again after a 60 seconds pause	POST	/login	http://localhost:3000
