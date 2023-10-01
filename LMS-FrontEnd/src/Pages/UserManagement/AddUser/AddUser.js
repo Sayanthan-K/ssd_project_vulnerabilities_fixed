@@ -45,8 +45,8 @@ const AddUser = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:5000/userManagement/get_userID", {
-        headers: { Authorization: "lmsvalidation " + token },
+      .get("http://localhost:5000/userManagement/get_userID",{
+        withCredentials:true
       })
       .then((res) => {
         if (res.data.auth === false) {
@@ -169,8 +169,8 @@ const AddUser = () => {
     };
 
     axios
-      .post("http://localhost:5000/userManagement/add_user", user, {
-        headers: { Authorization: "lmsvalidation " + token },
+      .post("http://localhost:5000/userManagement/add_user", user,{
+        withCredentials:true
       })
       .then((res) => {
         if (res.data.auth === false) {

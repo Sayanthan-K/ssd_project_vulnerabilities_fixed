@@ -19,11 +19,9 @@ const AddLink = (props) => {
     if (MaterialID) {
       axios
         .get(
-          "http://localhost:5000/admin/get_material?materialID=" + MaterialID,
-          {
-            headers: { Authorization: "lmsvalidation " + token },
-          }
-        )
+          "http://localhost:5000/admin/get_material?materialID=" + MaterialID,{
+            withCredentials:true
+          })
         .then((resp) => {
           if (resp.data.auth === false) {
             dispatch(logout());
@@ -106,8 +104,8 @@ const AddLink = (props) => {
       console.log(error);
       if (!MaterialID) {
         axios
-          .post("http://localhost:5000/admin/add_material", material, {
-            headers: { Authorization: "lmsvalidation " + token },
+          .post("http://localhost:5000/admin/add_material", material,{
+            withCredentials:true
           })
           .then((resp) => {
             if (resp.data.auth === false) {
@@ -123,8 +121,8 @@ const AddLink = (props) => {
           });
       } else {
         axios
-          .post("http://localhost:5000/admin/edit_link", material, {
-            headers: { Authorization: "lmsvalidation " + token },
+          .post("http://localhost:5000/admin/edit_link", material,{
+            withCredentials:true
           })
           .then((resp) => {
             if (resp.data.auth === false) {
@@ -149,7 +147,9 @@ const AddLink = (props) => {
       history.goBack();
     } else {
       axios
-        .get("http://localhost:5000/admin/get_module?week=" + week)
+        .get("http://localhost:5000/admin/get_module?week=" + week,{
+          withCredentials:true
+        })
         .then((res) => {
           history.replace("/my-courses/" + res.data[0].module);
         });

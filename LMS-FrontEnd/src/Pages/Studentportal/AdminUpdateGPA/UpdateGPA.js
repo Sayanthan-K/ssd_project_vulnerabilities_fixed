@@ -38,7 +38,9 @@ const UpdateGPA = (props) => {
       return;
     }
 
-    axios.post("http://localhost:5000/portal/GPA", data).then((res) => {
+    axios.post("http://localhost:5000/portal/GPA", data,{
+      withCredentials:true
+    }).then((res) => {
       if (res.data.error) {
         setError(res.data.error);
       } else if (res.data.created === false) {
@@ -51,7 +53,9 @@ const UpdateGPA = (props) => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:5000/portal/get_GPA?GPA=" + sid)
+      .get("http://localhost:5000/portal/get_GPA?GPA=" + sid,{
+        withCredentials:true
+      })
       .then((res) => {
         console.log(res.data);
         if (res.data.fetched === false) {

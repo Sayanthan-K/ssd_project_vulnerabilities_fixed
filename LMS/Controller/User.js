@@ -52,7 +52,7 @@ exports.Login = (req, res, next) => {
         const accessToken = jwt.sign(
           { userID: resp._id, email: resp.email },
           process.env.ACCESS_TOKEN_SECRET,
-          { expiresIn: '1m' }
+          { expiresIn: '5m' }
         );
         res.cookie('jwtAcc', accessToken, {
           httpOnly: true,
@@ -64,7 +64,7 @@ exports.Login = (req, res, next) => {
         const refreshToken = jwt.sign(
           { userID: resp._id,email: resp.email, password:resp.password},
           process.env.REFRESH_TOKEN_SECRET,
-          { expiresIn: '3m' }
+          { expiresIn: '15m' }
         )
 
         res.cookie('jwt', refreshToken, {
@@ -116,7 +116,7 @@ exports.refresh = (req, res) => {
             const accessToken = jwt.sign(
               { userID: resp._id, email: resp.email },
               process.env.ACCESS_TOKEN_SECRET,
-              { expiresIn: '1m' }
+              { expiresIn: '5m' }
             );
 
             res.cookie('jwtAcc', accessToken, {

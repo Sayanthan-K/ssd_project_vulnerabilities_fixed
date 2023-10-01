@@ -24,11 +24,9 @@ const AddSubmission = (props) => {
     if (material) {
       axios
         .get(
-          "http://localhost:5000/admin/get_material?materialID=" + material,
-          {
-            headers: { Authorization: "lmsvalidation " + token },
-          }
-        )
+          "http://localhost:5000/admin/get_material?materialID=" + material,{
+            withCredentials:true
+          })
         .then((resp) => {
           if (resp.data.auth === false) {
             dispatch(logout());
@@ -137,8 +135,8 @@ const AddSubmission = (props) => {
     if (!error) {
       if (!material) {
         axios
-          .post("http://localhost:5000/admin/add_submission", submissionData, {
-            headers: { Authorization: "lmsvalidation " + token },
+          .post("http://localhost:5000/admin/add_submission", submissionData,{
+            withCredentials:true
           })
           .then((resp) => {
             if (resp.data.auth === false) {
@@ -155,8 +153,8 @@ const AddSubmission = (props) => {
           });
       } else {
         axios
-          .post("http://localhost:5000/admin/edit_submission", submissionData, {
-            headers: { Authorization: "lmsvalidation " + token },
+          .post("http://localhost:5000/admin/edit_submission", submissionData,{
+            withCredentials:true
           })
           .then((resp) => {
             if (resp.data.auth === false) {
@@ -180,7 +178,9 @@ const AddSubmission = (props) => {
       history.goBack()
     } else {
       axios
-        .get("http://localhost:5000/admin/get_module?week=" + week)
+        .get("http://localhost:5000/admin/get_module?week=" + week,{
+          withCredentials:true
+        })
         .then((res) => {
           history.replace("/my-courses/" + res.data[0].module);
         });
@@ -272,7 +272,6 @@ const AddSubmission = (props) => {
           id="visible"
           type="radio"
           name="visibility"
-          required
         />
         <label className={classes.labels_radio} for="visible">
           Visible
@@ -288,7 +287,6 @@ const AddSubmission = (props) => {
           id="invisible"
           type="radio"
           name="visibility"
-          required
         />
         <label className={classes.labels_radio} for="invisible">
           Invisible

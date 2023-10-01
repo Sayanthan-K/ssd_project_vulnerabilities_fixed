@@ -13,8 +13,8 @@ const ModuleCourseInsights = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:5000/user/get_modules?ID=" + userID, {
-        headers: { Authorization: "lmsvalidation " + token },
+      .get("http://localhost:5000/user/get_modules?ID=" + userID,{
+        withCredentials:true
       })
       .then((res) => {
         if (res.data.auth === false) {
@@ -35,11 +35,9 @@ const ModuleCourseInsights = () => {
     axios
       .post(
         "http://localhost:5000/user/unenroll",
-        { ID: id, student: userID },
-        {
-          headers: { Authorization: "lmsvalidation " + token },
-        }
-      )
+        { ID: id, student: userID },{
+          withCredentials:true
+        })
       .then((res) => {
         if (res.data.auth === false) {
           dispatch(logout());

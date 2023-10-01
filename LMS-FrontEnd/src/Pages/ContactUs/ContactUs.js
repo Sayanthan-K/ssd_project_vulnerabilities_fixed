@@ -53,8 +53,11 @@ const ContactUs = () => {
     };
 
     axios
-      .post("http://localhost:5000/contact_us/query", { data })
+      .post("http://localhost:5000/contact_us/query", { data },{
+        withCredentials:true
+      })
       .then((res) => {
+        console.log(res)
         if (res.data.created) {
           setSubmitted(false);
         } else {
@@ -62,7 +65,8 @@ const ContactUs = () => {
           setSubmitted(false);
         }
       })
-      .catch(() => {
+      .catch((error) => {
+        console.log(error)
         setError("Unable to submit! retry again");
         setSubmitted(false);
       });

@@ -14,7 +14,9 @@ const View = (props) => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:5000/announcement/get_announcement?ID=" + annID)
+      .get("http://localhost:5000/announcement/get_announcement?ID=" + annID,{
+        withCredentials:true
+      })
       .then((res) => {
         if (res.data.error !== true) {
           setSubject(res.data.subject);

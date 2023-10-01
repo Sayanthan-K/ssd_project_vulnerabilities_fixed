@@ -42,12 +42,9 @@ const ModulePage = (props) => {
         "http://localhost:5000/admin//check_enrollment?moduleID=" +
           moduleID +
           "&id=" +
-          id,
-
-        {
-          headers: { Authorization: "lmsvalidation " + token },
-        }
-      )
+          id,{
+            withCredentials:true
+          })
       .then((resp) => {
         console.log(resp.data);
         if (resp.data.auth === false) {

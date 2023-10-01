@@ -27,8 +27,8 @@ const AddFaculties = (props) => {
       // setEdit(true);
       setBtn("SAVE");
       axios
-        .get("http://localhost:5000/Faculty/getfaculty?id=" + id, {
-          headers: { Authorization: "lmsvalidation " + token },
+        .get("http://localhost:5000/Faculty/getfaculty?id=" + id,{
+          withCredentials:true
         })
         .then((res) => {
           if (res.data.auth === false) {
@@ -89,8 +89,8 @@ const AddFaculties = (props) => {
     if (!id) {
       setBtn("ADD..");
       axios
-        .post("http://localhost:5000/Faculty/addFaculty", Facultydata, {
-          headers: { Authorization: "lmsvalidation " + token },
+        .post("http://localhost:5000/Faculty/addFaculty", Facultydata,{
+          withCredentials:true
         })
         .then((res) => {
           if (res.data.auth === false) {
@@ -117,8 +117,8 @@ const AddFaculties = (props) => {
     } else {
       setBtn("SAVE..");
       axios
-        .put("http://localhost:5000/Faculty/UpdateFaculty", Facultydata, {
-          headers: { Authorization: "lmsvalidation " + token },
+        .put("http://localhost:5000/Faculty/UpdateFaculty", Facultydata,{
+          withCredentials:true
         })
         .then((res) => {
           if (res.data.auth === false) {

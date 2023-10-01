@@ -46,8 +46,8 @@ const EventSummary = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:5000/event/get_events?userID=" + userID, {
-        headers: { Authorization: "lmsvalidation " + token },
+      .get("http://localhost:5000/event/get_events?userID=" + userID,{
+        withCredentials:true
       })
       .then((resp) => {
         if (resp.data.auth === false) {

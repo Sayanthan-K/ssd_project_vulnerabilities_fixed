@@ -12,7 +12,9 @@ const ModulePageInsights = (props) => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:5000/insight/material?materialID=" + material)
+      .get("http://localhost:5000/insight/material?materialID=" + material,{
+        withCredentials:true
+      })
       .then((resp) => {
         setStudents(resp.data.students);
         setList(resp.data.students);
@@ -23,7 +25,9 @@ const ModulePageInsights = (props) => {
         axios
           .get(
             "http://localhost:5000/admin/get_material/date?materialID=" +
-              material
+              material,{
+                withCredentials:true
+              }
           )
           .then((resp) => {
             setEditedDate(resp.data.date_time);

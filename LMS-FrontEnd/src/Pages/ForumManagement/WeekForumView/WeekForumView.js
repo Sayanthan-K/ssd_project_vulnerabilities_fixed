@@ -11,7 +11,9 @@ const WeekForumView = (props) => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:5000/ForumManagement/get_topicForums?moduleID="+moduleID)
+      .get("http://localhost:5000/ForumManagement/get_topicForums?moduleID="+moduleID,{
+        withCredentials:true
+      })
       .then((res) => {
         console.log(res.data);
         setTopicForums(res.data);

@@ -71,8 +71,8 @@ const NewEvent = () => {
     };
 
     axios
-      .post("http://localhost:5000/event/add_event", data, {
-        headers: { Authorization: "lmsvalidation " + token },
+      .post("http://localhost:5000/event/add_event", data,{
+        withCredentials:true
       })
       .then((resp) => {
         if (resp.data.auth === false) {

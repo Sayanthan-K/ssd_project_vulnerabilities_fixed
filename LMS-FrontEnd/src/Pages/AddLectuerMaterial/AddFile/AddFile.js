@@ -18,11 +18,9 @@ const AddFile = (props) => {
     if (material) {
       axios
         .get(
-          "http://localhost:5000/admin/get_material?materialID=" + material,
-          {
-            headers: { Authorization: "lmsvalidation " + token },
-          }
-        )
+          "http://localhost:5000/admin/get_material?materialID=" + material,{
+            withCredentials:true
+          })
         .then((resp) => {
           if (resp.data.auth === false) {
             dispatch(logout());
@@ -104,8 +102,8 @@ const AddFile = (props) => {
 
     if (!material) {
       axios
-        .post("http://localhost:5000/admin/add_file", files, {
-          headers: { Authorization: "lmsvalidation " + token },
+        .post("http://localhost:5000/admin/add_file", files,{
+          withCredentials:true
         })
         .then((resp) => {
           if (resp.data.auth === false) {
@@ -121,8 +119,8 @@ const AddFile = (props) => {
         });
     } else {
       axios
-        .post("http://localhost:5000/admin/add_file", files, {
-          headers: { Authorization: "lmsvalidation " + token },
+        .post("http://localhost:5000/admin/add_file", files,{
+          withCredentials:true
         })
         .then((resp) => {
           if (resp.data.auth === false) {
@@ -149,7 +147,9 @@ const AddFile = (props) => {
       history.goBack();
     } else {
       axios
-        .get("http://localhost:5000/admin/get_module?week=" + week)
+        .get("http://localhost:5000/admin/get_module?week=" + week,{
+          withCredentials:true
+        })
         .then((res) => {
           setload("SAVE");
           history.replace("/my-courses/" + res.data[0].module);

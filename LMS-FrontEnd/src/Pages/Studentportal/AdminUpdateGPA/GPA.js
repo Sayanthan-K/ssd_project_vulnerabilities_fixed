@@ -32,7 +32,9 @@ const GPA = (props) => {
       SID: props.id,
     };
 
-    axios.post("http://localhost:5000/portal/update_GPA", data).then((res) => {
+    axios.post("http://localhost:5000/portal/update_GPA", data,{
+      withCredentials:true
+    }).then((res) => {
       if (res.data.created === false) {
         setError("Unable to create! retry again.");
       } else {
@@ -65,7 +67,6 @@ const GPA = (props) => {
               onChange={statushandler}
               required
               name="status"
-              value={Gstatus}
             >
               <option selected hidden></option>
               <option value="pass">PASS</option>
@@ -76,7 +77,6 @@ const GPA = (props) => {
             <input
               value={GPANum}
               onChange={GPAHandler}
-              value={GPANum}
               required
               type="number"
               max="4"

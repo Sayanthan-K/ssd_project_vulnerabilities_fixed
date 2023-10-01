@@ -35,7 +35,7 @@ const ModulepageView = (props) => {
           semester +
           "&courseID=" +
           moduleid,{
-            headers: { Authorization: "lmsvalidation " + token },
+            withCredentials:true
           })
       
       .then((res) => {

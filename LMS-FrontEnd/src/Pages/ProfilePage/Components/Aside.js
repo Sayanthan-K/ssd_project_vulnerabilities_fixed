@@ -19,8 +19,8 @@ const Aside = (props) => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:5000/user/dp?ID=" + userID, {
-        headers: { Authorization: "lmsvalidation " + token },
+      .get("http://localhost:5000/user/dp?ID=" + userID,{
+        withCredentials:true
       })
       .then((res) => {
         if (res.data.available !== false) {

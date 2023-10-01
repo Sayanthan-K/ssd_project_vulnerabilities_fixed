@@ -14,7 +14,7 @@ const Aside = (props) => {
   useEffect(() => {
     axios
       .get("http://localhost:5000/admin/get_week?module=" + moduleID,{
-        headers: { Authorization: "lmsvalidation " + token },
+        withCredentials:true
       })
       .then((resp) => {
           setWeeks(resp.data)

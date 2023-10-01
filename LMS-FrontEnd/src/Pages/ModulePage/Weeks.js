@@ -15,8 +15,8 @@ const Weeks = (props) => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:5000/admin/get_week?module=" + module, {
-        headers: { Authorization: "lmsvalidation " + token },
+      .get("http://localhost:5000/admin/get_week?module=" + module,{
+        withCredentials:true
       })
       .then((res) => {
         setWeeks(res.data);
@@ -31,11 +31,9 @@ const Weeks = (props) => {
     axios
       .post(
         "http://localhost:5000/admin/add_week",
-        { week: last+1, module },
-        {
-          headers: { Authorization: "lmsvalidation " + token },
-        }
-      )
+        { week: last+1, module },{
+          withCredentials:true
+        })
       .then((res) => {
         if (res.data.auth === false) {
         } else if (res.data.ack === true) {

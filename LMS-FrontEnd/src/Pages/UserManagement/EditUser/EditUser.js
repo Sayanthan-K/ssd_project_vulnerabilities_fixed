@@ -31,8 +31,8 @@ const EditUser = (props) => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:5000/userManagement/edit_user?id=" + id, {
-        headers: { Authorization: "lmsvalidation " + token },
+      .get("http://localhost:5000/userManagement/edit_user?id=" + id,{
+        withCredentials:true
       })
       .then((res) => {
         if (res.data.auth === false) {
@@ -115,8 +115,8 @@ const EditUser = (props) => {
     };
 
     axios
-      .put("http://localhost:5000/userManagement/update_user", updatedUser, {
-        headers: { Authorization: "lmsvalidation " + token },
+      .put("http://localhost:5000/userManagement/update_user", updatedUser,{
+        withCredentials:true
       })
       .then((res) => {
         if (res.data.auth === false) {

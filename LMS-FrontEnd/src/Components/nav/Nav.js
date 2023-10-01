@@ -15,8 +15,8 @@ const Nav = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:5000/user/dp?ID=" + userID, {
-        headers: { Authorization: "lmsvalidation " + token },
+      .get("http://localhost:5000/user/dp?ID=" + userID,{
+        withCredentials:true
       })
       .then((res) => {
         setDp(res.data.dp);

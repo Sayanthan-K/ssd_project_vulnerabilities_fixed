@@ -16,7 +16,7 @@ const Submit = (props) => {
   useEffect(() => {
     axios
       .get("http://localhost:5000/admin/get_material?materialID=" + materialID,{
-        headers: { Authorization: "lmsvalidation " + token },
+        withCredentials:true
       })
       .then((resp) => {
         console.log(resp.data)

@@ -40,7 +40,7 @@ module.exports = async (req, res, next) => {
           const newAccessToken = jwt.sign(
             { userID: resp._id, email: resp.email },
             process.env.ACCESS_TOKEN_SECRET,
-            { expiresIn: '1m' }
+            { expiresIn: '5m' }
           );
           res.cookie('jwtAcc', newAccessToken, {
             httpOnly: true,

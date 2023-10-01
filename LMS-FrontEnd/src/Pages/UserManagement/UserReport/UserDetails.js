@@ -31,11 +31,9 @@ const UserDetails = (props) => {
   const deleteMaterial = () => {
     axios
       .delete(
-        "http://localhost:5000/userManagement/delete_user?_id=" + deleteID,
-        {
-          headers: { Authorization: "lmsvalidation " + token },
-        }
-      )
+        "http://localhost:5000/userManagement/delete_user?_id=" + deleteID,{
+          withCredentials:true
+        })
       .then((res) => {
         if (res.data.auth === false) {
           setError("You Are not Authorized!");
