@@ -29,8 +29,8 @@ const ModuleEnrollment = (props) => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:5000/Module/get_LIC?moduleID=" + id, {
-        headers: { Authorization: "lmsvalidation " + token },
+      .get("http://localhost:5000/Module/get_LIC?moduleID=" + id,{
+        withCredentials:true
       })
       .then((resp) => {
         if (resp.data.auth === false) {
@@ -57,8 +57,8 @@ const ModuleEnrollment = (props) => {
       studentID: userID,
     };
     axios
-      .post("http://localhost:5000/Module/enroll", data, {
-        headers: { Authorization: "lmsvalidation " + token },
+      .post("http://localhost:5000/Module/enroll", data,{
+        withCredentials:true
       })
       .then((resp) => {
         if (resp.data.auth === false) {

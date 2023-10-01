@@ -21,11 +21,9 @@ const Row = (props) => {
   const onDelete = () => {
     axios
       .delete(
-        "http://localhost:5000/event/delete_event?_id=" + props.data._id,
-        {
-          headers: { Authorization: "lmsvalidation " + token },
-        }
-      )
+        "http://localhost:5000/event/delete_event?_id=" + props.data._id,{
+          withCredentials:true
+        })
       .then((resp) => {
         if (resp.data.auth === false) {
           dispatch(logout());

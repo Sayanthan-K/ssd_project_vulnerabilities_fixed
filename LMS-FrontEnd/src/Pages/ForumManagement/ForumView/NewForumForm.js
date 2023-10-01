@@ -47,8 +47,8 @@ const NewForumForm = (props) => {
       axios
         .get(
           "http://localhost:5000/ForumManagement/get_userName?userID=" +
-            userID, {
-              headers: { Authorization: "lmsvalidation " + token },
+            userID,{
+              withCredentials:true
             })
         .then((res) => {
           if (res.data.auth === false) {
@@ -108,8 +108,8 @@ const NewForumForm = (props) => {
       };
 
       axios
-      .post("http://localhost:5000/ForumManagement/add_normalForum", normalForum, {
-        headers: { Authorization: "lmsvalidation " + token },
+      .post("http://localhost:5000/ForumManagement/add_normalForum", normalForum,{
+        withCredentials:true
       })
       .then((res) => {
         if(res.data.auth===false){
@@ -148,8 +148,8 @@ const NewForumForm = (props) => {
       };
 
       axios
-      .post("http://localhost:5000/ForumManagement/add_replyForum", replyForum, {
-        headers: { Authorization: "lmsvalidation " + token },
+      .post("http://localhost:5000/ForumManagement/add_replyForum", replyForum,{
+        withCredentials:true
       })
       .then((res) => {
         if(res.data.auth===false){

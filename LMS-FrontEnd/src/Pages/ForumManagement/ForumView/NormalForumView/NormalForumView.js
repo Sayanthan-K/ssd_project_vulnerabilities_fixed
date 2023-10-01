@@ -37,8 +37,8 @@ const NormalForumView = (props) => {
   useEffect(() => {
     axios
       .get(
-        "http://localhost:5000/ForumManagement/get_userName?userID=" + userID, {
-          headers: { Authorization: "lmsvalidation " + token },
+        "http://localhost:5000/ForumManagement/get_userName?userID=" + userID,{
+          withCredentials:true
         })
       .then((res) => {
         if (res.data.auth === false) {
@@ -83,11 +83,9 @@ const NormalForumView = (props) => {
     axios
       .put(
         "http://localhost:5000/ForumManagement/update_normalForum",
-        updatedNormalForum,
-        {
-          headers: { Authorization: "lmsvalidation " + token },
-        }
-      )
+        updatedNormalForum,{
+          withCredentials:true
+        })
       .then((res) => {
         if (res.data.auth === false) {
           setError("You Are not Authorized!");
@@ -162,11 +160,9 @@ const NormalForumView = (props) => {
     
     axios
       .delete(
-        "http://localhost:5000/ForumManagement/delete_normalForum?_id="+normalForumID,
-        {
-          headers: { Authorization: "lmsvalidation " + token },
-        }
-      )
+        "http://localhost:5000/ForumManagement/delete_normalForum?_id="+normalForumID,{
+          withCredentials:true
+        })
       .then((res) => {
         if (res.data.auth === false) {
           setError("You Are not Authorized!");

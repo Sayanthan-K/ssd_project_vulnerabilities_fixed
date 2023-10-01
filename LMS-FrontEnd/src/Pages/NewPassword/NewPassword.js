@@ -17,8 +17,9 @@ const NewPassword = (props) => {
   useEffect(() => {
     axios
       .get(
-        "http://localhost:5000/user/check_pass_reset_validity?userID=" + userID
-      )
+        "http://localhost:5000/user/check_pass_reset_validity?userID=" + userID,{
+          withCredentials:true
+        })
       .then((res) => {
         if (res.data.ack === false) {
           history.replace("/index");
@@ -56,7 +57,9 @@ const NewPassword = (props) => {
       password: password,
     };
     axios
-      .post("http://localhost:5000/user/reset_password", data)
+      .post("http://localhost:5000/user/reset_password", data,{
+        withCredentials:true
+      })
       .then((res) => {
         console.log(res.data);
         if (res.data.ack === false) {

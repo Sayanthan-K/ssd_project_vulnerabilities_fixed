@@ -44,7 +44,9 @@ const AddForum = (props) => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:5000/ForumManagement/get_moduleID?weekID="+weekID)
+      .get("http://localhost:5000/ForumManagement/get_moduleID?weekID="+weekID,{
+        withCredentials:true
+      })
       .then((res) => {
         setModuleID(res.data.module);
         setWeekNo(res.data.week);
@@ -77,7 +79,9 @@ const AddForum = (props) => {
     };
 
     axios
-      .post("http://localhost:5000/ForumManagement/add_forum", forum)
+      .post("http://localhost:5000/ForumManagement/add_forum", forum,{
+        withCredentials:true
+      })
       .then((res) => {
         if(res.data){
           history.goBack();

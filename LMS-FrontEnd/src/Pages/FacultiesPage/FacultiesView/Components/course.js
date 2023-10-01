@@ -36,10 +36,9 @@ const Course = (props) => {
 
   const onDeleteCourse = () => {
     axios
-      .delete("http://localhost:5000/course/delete_course?id=" +deleteID, 
-        {
-          headers: { Authorization: "lmsvalidation " + token },})
-      
+      .delete("http://localhost:5000/course/delete_course?id=" +deleteID,{
+        withCredentials:true
+      })
       .then((res) => {
         if (res.data.auth === false) {
           setTimeout(() => {

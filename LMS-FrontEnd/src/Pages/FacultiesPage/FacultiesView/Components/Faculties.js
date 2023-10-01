@@ -43,7 +43,8 @@ const Faculties = (props) => {
   const onDeleteA = () => {
     axios
       .delete("http://localhost:5000/Faculty/delete_faculty?id=" + deleteID,{
-        headers: { Authorization: "lmsvalidation " + token },})
+        withCredentials:true
+      })
         
       
       .then((res) => {

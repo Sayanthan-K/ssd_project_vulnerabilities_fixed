@@ -31,8 +31,9 @@ const ForumView = (props) => {
     axios
       .get(
         "http://localhost:5000/ForumManagement/get_topicForum?forumID=" +
-          forumID
-      )
+          forumID,{
+            withCredentials:true
+          })
       .then((res) => {
         setUserID(res.data.userID);
         setTopic(res.data.topic);
@@ -42,11 +43,9 @@ const ForumView = (props) => {
         axios
           .get(
             "http://localhost:5000/ForumManagement/get_userName?userID=" +
-              res.data.userID,
-            {
-              headers: { Authorization: "lmsvalidation " + token },
-            }
-          )
+              res.data.userID,{
+                withCredentials:true
+              })
           .then((res) => {
             if (res.data.auth === false) {
               setError("You Are not Authorized!");
@@ -85,8 +84,9 @@ const ForumView = (props) => {
         "http://localhost:5000/ForumManagement/get_normalForums?moduleID=" +
           moduleID +
           "&weekID=" +
-          weekID
-      )
+          weekID,{
+            withCredentials:true
+          })
       .then((res) => {
         if (res.data.noData === true) {
           setError("No NormalForum Available");

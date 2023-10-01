@@ -23,7 +23,9 @@ const NewAnnouncement = (props) => {
       setEdit(true);
       console.log("aaa");
       axios
-        .get("http://localhost:5000/announcement/get_announcement?ID=" + annID)
+        .get("http://localhost:5000/announcement/get_announcement?ID=" + annID,{
+          withCredentials:true
+        })
         .then((res) => {
           if (res.data.error !== true) {
             setSubject(res.data.subject);
@@ -80,7 +82,9 @@ const NewAnnouncement = (props) => {
 
     setBtn("SAVING...");
     axios
-      .post("http://localhost:5000/announcement/add_announcement", data)
+      .post("http://localhost:5000/announcement/add_announcement", data,{
+        withCredentials:true
+      })
       .then((res) => {
         console.log(res.data);
         setBtn("SAVE");
@@ -111,8 +115,9 @@ const NewAnnouncement = (props) => {
   const onDelete = () => {
     axios
       .delete(
-        "http://localhost:5000/announcement/delete_announcement?ID=" + annID
-      )
+        "http://localhost:5000/announcement/delete_announcement?ID=" + annID,{
+          withCredentials:true
+        })
       .then((res) => {
         setClicked(false);
         history.replace("/dashboard");

@@ -99,8 +99,8 @@ const WeekContainer = (props) => {
     };
 
     axios
-      .post("http://localhost:5000/insight/add_insight", insightData, {
-        headers: { Authorization: "lmsvalidation " + token },
+      .post("http://localhost:5000/insight/add_insight", insightData,{
+        withCredentials:true
       })
       .then((resp) => {
         if (resp.data.auth === false) {
@@ -121,11 +121,9 @@ const WeekContainer = (props) => {
         "http://localhost:5000/admin/delete_material?id=" +
           props.data._id +
           "&week=" +
-          props.week,
-        {
-          headers: { Authorization: "lmsvalidation " + token },
-        }
-      )
+          props.week,{
+            withCredentials:true
+          })
       .then((res) => {
         console.log(res.data);
         if (res.data.auth === false) {

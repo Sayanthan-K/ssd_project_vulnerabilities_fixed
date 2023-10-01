@@ -32,6 +32,21 @@ const TimeTable=require("./routes/Timetable");
 
 
 
+const allowedOrigins = 'http://localhost:3000';
+
+const corsOptions = {
+  origin: function (origin, callback) {
+    if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true, // Include this if you are sending cookies or headers with credentials.
+};
+
+app.use(cors(corsOptions));
+
 // app.use(isAuth);
 app.use((req, res, next) => {
   if (req.path === '/user/login' || req.path === '/user/refresh' || req.path === '/user/logout') {
@@ -46,20 +61,6 @@ app.use(express.json());
 app.use(BodyParser.json());
 app.use(cookieParser())
 
-const allowedOrigins ='http://localhost:3000';
-const corsOptions = {
-  origin: function (origin, callback) {
-    if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
-  },
-  credentials: true,
-};
-
-app.use(cors(corsOptions));
-
 app.use("/uploads", express.static("uploads"));
 app.use("/TimeTable", express.static("TimeTable"));
 app.use("/Reports", express.static("Reports"));
@@ -67,18 +68,6 @@ app.use("/Books", express.static("Books"));
 app.use("/Dp", express.static("Dp"));
 app.use("/files", express.static("files"));
 app.use("/announcement", express.static("announcement"));
-
-app.use((req, res, next) => {
-  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');;
-  res.setHeader(
-    "Access-Control-Allow-Methods",
-    "GET,POST,PUT,PATCH,DELETE,OPTIONS"
-  );
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
-  res.setHeader("Access-Control-Allow-Credentials", "true")
-  next();
-});
-
 
 app.use("/timetable" , TimeTable);
 app.use('/admin', AdminRoutes);

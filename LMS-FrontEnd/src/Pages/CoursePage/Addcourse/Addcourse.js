@@ -28,8 +28,8 @@ const Addcourse = (props) => {
       setEdit(true);
       setBtn("SAVE");
       axios
-        .get("http://localhost:5000/course/getcourse?id=" + courseid, {
-          headers: { Authorization: "lmsvalidation " + token },
+        .get("http://localhost:5000/course/getcourse?id=" + courseid,{
+          withCredentials:true
         })
         .then((res) => {
           //console.log(res.data._id);
@@ -91,7 +91,8 @@ const Addcourse = (props) => {
         .post("http://localhost:5000/course/addcourse", {
           data: coursedata,
           facultyID: facultyID,
-          headers: { Authorization: "lmsvalidation " + token },
+        },{
+          withCredentials:true
         })
 
         .then((res) => {
@@ -109,8 +110,8 @@ const Addcourse = (props) => {
     } else {
       setBtn("SAVE..");
       axios
-        .put("http://localhost:5000/course/Updatecourse", coursedata, {
-          headers: { Authorization: "lmsvalidation " + token },
+        .put("http://localhost:5000/course/Updatecourse", coursedata,{
+          withCredentials:true
         })
         .then((res) => {
           // history.replace("/faculties");

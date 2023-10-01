@@ -16,7 +16,9 @@ const StudentPortal = (props) => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:5000/portal/get_GPA?GPA=" + sid)
+      .get("http://localhost:5000/portal/get_GPA?GPA=" + sid,{
+        withCredentials:true
+      })
       .then((res) => {
         if (res.data.fetched === false) {
           setEmpty(true);
@@ -28,8 +30,8 @@ const StudentPortal = (props) => {
       .catch(() => {});
 
     axios
-      .get("http://localhost:5000/userManagement/edit_user?id=" + sid, {
-        headers: { Authorization: "lmsvalidation " + token },
+      .get("http://localhost:5000/userManagement/edit_user?id=" + sid,{
+        withCredentials:true
       })
       .then((res) => {
         if (res.data) {

@@ -40,11 +40,9 @@ const ModuleView = (props) => {
         "http://localhost:5000/Enroll/enrollstatus?ID=" +
           userID +
           "&moduleid=" +
-          props.Module._id,
-        {
-          headers: { Authorization: "lmsvalidation " + token },
-        }
-      )
+          props.Module._id,{
+            withCredentials:true
+          })
       .then((resp) => {
         console.log(resp.data);
         if (resp.data.auth === false) {
@@ -65,8 +63,8 @@ const ModuleView = (props) => {
 
   const ONDeleteModule = () => {
     axios
-      .delete("http://localhost:5000/Module/delete_Module?id=" + deleteID, {
-        headers: { Authorization: "lmsvalidation " + token },
+      .delete("http://localhost:5000/Module/delete_Module?id=" + deleteID,{
+        withCredentials:true
       })
 
       .then((res) => {

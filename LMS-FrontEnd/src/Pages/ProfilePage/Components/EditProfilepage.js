@@ -33,8 +33,8 @@ const EditProfile = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:5000/user/get_user?ID=" + userID, {
-        headers: { Authorization: "lmsvalidation " + token },
+      .get("http://localhost:5000/user/get_user?ID=" + userID,{
+        withCredentials:true
       })
       .then((res) => {
         if (res.data.auth === false) {
@@ -67,8 +67,8 @@ const EditProfile = () => {
   const onDeleteBtn = () => {
     // setError(null)
     axios
-      .delete("http://localhost:5000/user/delete_user?ID", userID, {
-        headers: { Authorization: "lmsvalidation " + token },
+      .delete("http://localhost:5000/user/delete_user?ID", userID,{
+        withCredentials:true
       })
       .then((res) => {
         if (res.data.ack === true) {
@@ -139,8 +139,8 @@ const EditProfile = () => {
     };
 
     axios
-      .post("http://localhost:5000/user/edit_user", data, {
-        headers: { Authorization: "lmsvalidation " + token },
+      .post("http://localhost:5000/user/edit_user", data,{
+        withCredentials:true
       })
       .then((res) => {
         if (res.data.auth === false) {
@@ -165,8 +165,8 @@ const EditProfile = () => {
 
     setFileBtn("SAVING...");
     axios
-      .post("http://localhost:5000/user/add_dp", dp, {
-        headers: { Authorization: "lmsvalidation " + token },
+      .post("http://localhost:5000/user/add_dp", dp,{
+        withCredentials:true
       })
       .then((res) => {
         if (res.data.auth === false) {

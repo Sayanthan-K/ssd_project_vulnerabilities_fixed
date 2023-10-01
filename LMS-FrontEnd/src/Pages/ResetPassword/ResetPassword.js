@@ -31,7 +31,9 @@ const ResetPassword = () => {
     }
 
     axios
-      .get("http://localhost:5000/user/check_mail?email=" + email)
+      .get("http://localhost:5000/user/check_mail?email=" + email,{
+        withCredentials:true
+      })
       .then((res) => {
         console.log(res.data);
         if (res.data.available === false) {
@@ -58,6 +60,8 @@ const ResetPassword = () => {
       .post("http://localhost:5000/user/check_otp", {
         email: email,
         otp: Inputedotp,
+      },{
+        withCredentials:true
       })
       .then((res) => {
         console.log(res.data);

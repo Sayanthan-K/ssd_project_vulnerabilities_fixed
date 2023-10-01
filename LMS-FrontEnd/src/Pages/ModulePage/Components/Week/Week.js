@@ -24,8 +24,8 @@ const Week = (props) => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:5000/admin/get_materials?contents=" + week, {
-        headers: { Authorization: "lmsvalidation " + token },
+      .get("http://localhost:5000/admin/get_materials?contents=" + week,{
+        withCredentials:true
       })
       .then((res) => {
         if(res.data.auth === false){

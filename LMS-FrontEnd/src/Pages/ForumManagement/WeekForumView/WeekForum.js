@@ -22,10 +22,9 @@ const WeekForum = (props) => {
         axios
           .get(
             "http://localhost:5000/ForumManagement/get_userName?userID=" +
-              props.data.userID, {
-                headers: { Authorization: "lmsvalidation " + token },
-              }
-          )
+              props.data.userID,{
+                withCredentials:true
+              })
           .then((res) => {
             if (res.data.auth === false) {
               setError("You Are not Authorized!");

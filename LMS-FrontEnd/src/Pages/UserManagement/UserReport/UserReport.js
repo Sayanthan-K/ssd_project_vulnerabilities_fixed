@@ -37,7 +37,7 @@ const clickedHandler = (event) => {
   useEffect(() => {
     axios
       .get("http://localhost:5000/userManagement/get_users",{
-        headers: { Authorization: "lmsvalidation " + token },
+        withCredentials:true
       })
       .then((res) => {
         if (res.data.auth === false) {

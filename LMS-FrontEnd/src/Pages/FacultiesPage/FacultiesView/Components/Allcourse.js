@@ -31,11 +31,9 @@ const Allcourse = (props) => {
         "http://localhost:5000/Faculty/get_courses",
         {
           courses: props.faculty.courses,
-        },
-        {
-          headers: { Authorization: "lmsvalidation " + token },
-        }
-      )
+        },{
+          withCredentials:true
+        })
 
       .then((res) => {
         if (res.data.auth === false) {

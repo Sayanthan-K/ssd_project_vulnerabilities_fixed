@@ -25,8 +25,8 @@ const AddModule = (props) => {
       setBtn("SAVE");
 
       axios
-        .get("http://localhost:5000/Module/get_module?moduleID=" + moduleID, {
-          headers: { Authorization: "lmsvalidation " + token },
+        .get("http://localhost:5000/Module/get_module?moduleID=" + moduleID,{
+          withCredentials:true
         })
         .then((res) => {
           if (res.data.auth === false) {
@@ -106,8 +106,9 @@ const AddModule = (props) => {
       axios
         .post("http://localhost:5000/Module/addModule", {
           data: Moduledata,
-          courseID: courseID,
-          headers: { Authorization: "lmsvalidation " + token },
+          courseID: courseID
+        },{
+          withCredentials:true
         })
 
         .then((res) => {
@@ -128,8 +129,8 @@ const AddModule = (props) => {
     } else {
       setBtn("SAVE..");
       axios
-        .put("http://localhost:5000/Module/UpdateModule", Moduledata, {
-          headers: { Authorization: "lmsvalidation " + token },
+        .put("http://localhost:5000/Module/UpdateModule", Moduledata,{
+          withCredentials:true
         })
         .then((res) => {
           if (res.data.auth === false) {

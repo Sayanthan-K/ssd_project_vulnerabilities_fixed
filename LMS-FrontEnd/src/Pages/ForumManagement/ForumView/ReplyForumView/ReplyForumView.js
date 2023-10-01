@@ -35,8 +35,9 @@ const ReplyForumView = (props) => {
     axios
       .get(
         "http://localhost:5000/ForumManagement/get_replyForum?replyForumID=" +
-          replyForumID
-      )
+          replyForumID,{
+            withCredentials:true
+          })
       .then((res) => {
         if (res.data.noData === true) {
           setError("No Reply Forums");
@@ -49,11 +50,9 @@ const ReplyForumView = (props) => {
           axios
             .get(
               "http://localhost:5000/ForumManagement/get_userName?userID=" +
-                res.data.userID,
-              {
-                headers: { Authorization: "lmsvalidation " + token },
-              }
-            )
+                res.data.userID,{
+                  withCredentials:true
+                })
             .then((res) => {
               if (res.data.auth === false) {
                 setError("You Are not Authorized!");
@@ -100,11 +99,9 @@ const ReplyForumView = (props) => {
     axios
       .put(
         "http://localhost:5000/ForumManagement/update_replyForum",
-        updatedReplyForum,
-        {
-          headers: { Authorization: "lmsvalidation " + token },
-        }
-      )
+        updatedReplyForum,{
+          withCredentials:true
+        })
       .then((res) => {
         if (res.data.auth === false) {
           setError("You Are not Authorized!");
@@ -162,11 +159,9 @@ const ReplyForumView = (props) => {
     axios
       .post(
         "http://localhost:5000/ForumManagement/delete_replyForum",
-        deleteIDs,
-        {
-          headers: { Authorization: "lmsvalidation " + token },
-        }
-      )
+        deleteIDs,{
+          withCredentials:true
+        })
       .then((res) => {
         if (res.data.auth === false) {
           setError("You Are not Authorized!");

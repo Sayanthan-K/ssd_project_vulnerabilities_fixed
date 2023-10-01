@@ -55,11 +55,9 @@ const ModuleEnrollmentReport = (props) => {
     axios
       .get(
         // Module details fetch
-        "http://localhost:5000/Module/get_Moduledetails?moduleId=" + moduleId,
-        {
-          headers: { Authorization: "lmsvalidation " + token },
-        }
-      )
+        "http://localhost:5000/Module/get_Moduledetails?moduleId=" + moduleId,{
+          withCredentials:true
+        })
       .then((res) => {
         if (res.data.auth === false) {
           setError("You Are not Authorized to get Module !");
@@ -88,11 +86,9 @@ const ModuleEnrollmentReport = (props) => {
     axios
       .post(
         "http://localhost:5000/Enroll/get_enrollcount",
-        { moduleId: moduleId },
-        {
-          headers: { Authorization: "lmsvalidation " + token },
-        }
-      )
+        { moduleId: moduleId },{
+          withCredentials:true
+        })
       .then((res) => {
         if (res.data.auth === false) {
           setError("You Are not Authorized to get Module !");
@@ -109,8 +105,8 @@ const ModuleEnrollmentReport = (props) => {
       });
 
     axios
-      .get("http://localhost:5000/Enroll/get_enroll?id=" + moduleId, {
-        headers: { Authorization: "lmsvalidation " + token },
+      .get("http://localhost:5000/Enroll/get_enroll?id=" + moduleId,{
+        withCredentials:true
       })
       .then((res) => {
         console.log("ho");
