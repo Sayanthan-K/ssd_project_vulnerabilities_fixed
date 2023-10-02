@@ -12,32 +12,44 @@ const Login = () => {
   const [password, setPassword] = useState();
   const [unAuth, setUnAuth] = useState(false);
   const [openSnackbar, setOpenSnackbar] = useState(false);
-  const [severity, setSeverity] = useState('')
-  const [alertMessage, setAlertMessage] = useState('')
+  const [severity, setSeverity] = useState("");
+  const [alertMessage, setAlertMessage] = useState("");
 
   const dispatch = useDispatch();
   const history = useHistory();
 
   const handleCloseSnackbar = () => {
     setOpenSnackbar(false);
-};
+  };
 
   const submitHandler = (event) => {
     event.preventDefault();
-    if (!email.trim() || !email.includes("@")) {
+    // Output sanitization check
+    const sanitizedEmail = sanitizeInput(email);
+    const sanitizedPassword = sanitizeInput(password);
+    // Input validation
+    if (
+      !sanitizedEmail.trim() ||
+      !sanitizedEmail.includes("@") ||
+      !sanitizedEmail.endsWith(".com")
+    ) {
       setUnAuth(true);
       return;
-    } else if (password.length < 6) {
+    } else if (sanitizedPassword.length < 6) {
       setUnAuth(true);
       return;
     }
     axios
-      .post("http://localhost:5000/user/login", {
-        email: email,
-        password: password,
-      },{
-        withCredentials: true,
-      })
+      .post(
+        "http://localhost:5000/user/login",
+        {
+          email: email,
+          password: password,
+        },
+        {
+          withCredentials: true,
+        }
+      )
       .then((res) => {
         if (res.data.auth === true) {
           dispatch(
@@ -57,9 +69,9 @@ const Login = () => {
       })
       .catch((er) => {
         console.log(er);
-        setAlertMessage(er?.response?.data?.message)
-        setSeverity('error')
-        setOpenSnackbar(true)
+        setAlertMessage(er?.response?.data?.message);
+        setSeverity("error");
+        setOpenSnackbar(true);
       });
   };
   const emailhandler = (event) => {
@@ -70,9 +82,23 @@ const Login = () => {
     setUnAuth(false);
     setPassword(event.target.value);
   };
+  // Output Sanitizes function
+  const sanitizeInput = (input) => {
+    return input
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#39;");
+  };
   return (
     <div className={classes.login_container}>
-      <DescriptionAlerts openSnackbar={openSnackbar} handleCloseSnackbar={handleCloseSnackbar} severity={severity} alertMessage={alertMessage} />
+      <DescriptionAlerts
+        openSnackbar={openSnackbar}
+        handleCloseSnackbar={handleCloseSnackbar}
+        severity={severity}
+        alertMessage={alertMessage}
+      />
       <div className={classes.login}>
         <h2 className={classes.title}>Log In</h2>
         <form onSubmit={submitHandler} className={classes.form_container}>
