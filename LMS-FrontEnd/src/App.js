@@ -57,6 +57,7 @@ import { useSelector } from "react-redux";
 
 function App() {
   const isLogedIn = useSelector((state) => state.loging.isLogedIn);
+  const type = useSelector((state) => state.loging.type);
 
   return (
     <Provider store={store}>
@@ -76,12 +77,16 @@ function App() {
               path="/my-courses/add_attandance/:weekID"
               exact
               component={AddAttandance}
-            ></Route>
+            >
+              {type !== "admin" && <Redirect to="/dashboard" />}
+            </Route>
             <Route
               path="/my-courses/add_submission/:weekID"
               exact
               component={AddSubmission}
-            />
+            >
+              {type !== "admin" && <Redirect to="/dashboard" />}
+            </Route>
             <Route
               path="/my-courses/add_notes/:weekID"
               exact
@@ -91,33 +96,45 @@ function App() {
               path="/my-courses/add_file/:weekID"
               exact
               component={AddFile}
-            />
+            >
+              {type !== "admin" && <Redirect to="/dashboard" />}
+            </Route>
             <Route
               path="/my-courses/add_link/:weekID"
               exact
               component={AddLink}
-            />
+            >
+              {type !== "admin" && <Redirect to="/dashboard" />}
+            </Route>
 
             <Route
               path="/my-courses/edit_submission/:MaterialID"
               exact
               component={AddSubmission}
-            />
+            >
+              {type !== "admin" && <Redirect to="/dashboard" />}
+            </Route>
             <Route
               path="/my-courses/edit_notes/:MaterialID"
               exact
               component={AddNotes}
-            />
+            >
+              {type !== "admin" && <Redirect to="/dashboard" />}
+            </Route>
             <Route
               path="/my-courses/edit_file/:MaterialID"
               exact
               component={AddFile}
-            />
+            >
+              {type !== "admin" && <Redirect to="/dashboard" />}
+            </Route>
             <Route
               path="/my-courses/edit_link/:MaterialID"
               exact
               component={AddLink}
-            />
+            >
+              {type !== "admin" && <Redirect to="/dashboard" />}
+            </Route>
 
             <Route
               path="/my-courses/select_type/:weekID"
@@ -138,17 +155,27 @@ function App() {
               path="/services/student_portal/:SID"
               exact
               component={UpdateGPA}
-            />
+            >
+              {type !== "admin" && <Redirect to="/dashboard" />}
+            </Route>
             <Route
               path="/services/student_portal/view/:SID"
               exact
               component={StudentPortal}
             />
 
-            <Route path="/add-user" exact component={AddUser} />
-            <Route path="/user-report" exact component={UserReport} />
-            <Route path="/edit-user/:editID" exact component={EditUser} />
-            <Route path="/add-role" exact component={AddRole} />
+            <Route path="/add-user" exact component={AddUser}>
+              {type !== "admin" && <Redirect to="/dashboard" />}
+            </Route>
+            <Route path="/user-report" exact component={UserReport}>
+              {type !== "admin" && <Redirect to="/dashboard" />}
+            </Route>
+            <Route path="/edit-user/:editID" exact component={EditUser}>
+              {type !== "admin" && <Redirect to="/dashboard" />}
+            </Route>
+            <Route path="/add-role" exact component={AddRole}>
+              {type !== "admin" && <Redirect to="/dashboard" />}
+            </Route>
 
             <Route path="/faculties" exact component={FacultiesView} />
             <Route
@@ -160,22 +187,30 @@ function App() {
               path="/faculties/Addfaculties"
               exact
               component={AddFaculties}
-            />
+            >
+              {type !== "admin" && <Redirect to="/dashboard" />}
+            </Route>
             <Route
               path="/faculties/editfaculties/:facultyId"
               exact
               component={AddFaculties}
-            />
+            >
+              {type !== "admin" && <Redirect to="/dashboard" />}
+            </Route>
             <Route
               path="/faculties/Addcourse/:facultyID"
               exact
               component={Addcourse}
-            />
+            >
+              {type !== "admin" && <Redirect to="/dashboard" />}
+            </Route>
             <Route
               path="/faculties/editcourse/:courseid"
               exact
               component={Addcourse}
-            />
+            >
+              {type !== "admin" && <Redirect to="/dashboard" />}
+            </Route>
             <Route
               path="/faculties/course/Year/:courseID"
               exact
@@ -190,12 +225,16 @@ function App() {
               path="/faculties/course/Addmodule/:Year/:semester/:moduleid"
               exact
               component={AddModule}
-            />
+            >
+              {type !== "admin" && <Redirect to="/dashboard" />}
+            </Route>
             <Route
               path="/faculties/module/:moduleid1"
               exact
               component={AddModule}
-            />
+            >
+              {type !== "admin" && <Redirect to="/dashboard" />}
+            </Route>
             <Route
               path="/faculties/enroll/:moduleID"
               exact
@@ -225,7 +264,9 @@ function App() {
               path="/dashboard/edit_announcement/:annID"
               exact
               component={NewAnnouncement}
-            />
+            >
+              {type !== "admin" && <Redirect to="/dashboard" />}
+            </Route>
 
             <Route path="/index" exact component={Login}>
               {isLogedIn && <Redirect to="/dashboard" />}

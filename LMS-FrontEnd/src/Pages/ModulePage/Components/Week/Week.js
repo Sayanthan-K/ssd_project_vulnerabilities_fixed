@@ -4,14 +4,14 @@ import { useEffect } from "react";
 import axios from "axios";
 import { useState } from "react";
 import Loader from "../../../../Components/Loader/Loader";
-import { useSelector,useDispatch } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { logout } from "../../../../Store/auth";
 
 const Week = (props) => {
   const [isempty, setIsEmpty] = useState(false);
   const userType = useSelector((state) => state.loging.type);
   const token = useSelector((state) => state.loging.token);
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   if (props.row.contents == null) {
     setIsEmpty(true);
@@ -24,13 +24,13 @@ const Week = (props) => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:5000/admin/get_materials?contents=" + week,{
-        withCredentials:true
+      .get("http://localhost:5000/admin/get_materials?contents=" + week, {
+        withCredentials: true,
       })
       .then((res) => {
-        if(res.data.auth === false){
-          dispatch(logout())
-        }else if (res.data.available !== false) {
+        if (res.data.auth === false) {
+          dispatch(logout());
+        } else if (res.data.available !== false) {
           setContents(res.data);
           setLoaded(false);
         } else {
