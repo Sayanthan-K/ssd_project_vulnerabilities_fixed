@@ -76,21 +76,21 @@ module.exports = async (req, res, next) => {
   req.userID = UID;
   userID = UID;
 
-  db.getDb()
-    .db()
-    .collection("User")
-    .findOne({ _id: new mongodb.ObjectId(userID) })
-    .then((resp) => {
-      if (resp) {
-        const type = resp.type;
-        req.type = type === "admin" || type === "lecturer";
-      } else {
-        req.type = false;
-      }
-    })
-    .catch((er) => {
-      console.log(er);
-    });
+  // db.getDb()
+  //   .db()
+  //   .collection("User")
+  //   .findOne({ _id: new mongodb.ObjectId(userID) })
+  //   .then((resp) => {
+  //     if (resp) {
+  //       const type = resp.type;
+  //       req.type = type === "admin" || type === "lecturer";
+  //     } else {
+  //       req.type = false;
+  //     }
+  //   })
+  //   .catch((er) => {
+  //     console.log(er);
+  //   });
 
   req.auth = true;
   next();
