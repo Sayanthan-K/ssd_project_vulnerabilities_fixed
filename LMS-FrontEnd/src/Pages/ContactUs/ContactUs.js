@@ -7,13 +7,17 @@ import { useState, useEffect } from "react";
 import Loader from "../../Components/Loader/Loader";
 import ErrorPopup from "../../Components/ErrorPopup/ErrorPopup";
 import axios from "axios";
+import Success from "../../Components/SuccessPopup/Success";
+import { useHistory } from "react-router";
 
 const ContactUs = () => {
+  const history = useHistory();
   const [name, setname] = useState();
   const [email, setEmail] = useState();
   const [message, setMessage] = useState();
   const [error, setError] = useState(null);
   const [submitted, setSubmitted] = useState(false);
+  const [success, setSuccess] = useState(false);
 
   const submit = (event) => {
     event.preventDefault();
@@ -74,6 +78,7 @@ const ContactUs = () => {
       .then((res) => {
         console.log(res);
         if (res.data.created) {
+          setSuccess(true);
           setSubmitted(false);
         } else {
           setError("Unable to submit! retry again");
@@ -108,6 +113,9 @@ const ContactUs = () => {
       .replace(/'/g, "&#39;");
   };
 
+  const onRedirect = () => {
+    window.location.reload();
+  };
   return (
     <>
       {submitted && (
@@ -119,7 +127,7 @@ const ContactUs = () => {
       )}
       <div className={classes.conatiner}>
         {error && <ErrorPopup clickedHandler={clickedHandler} error={error} />}
-
+        {success && <Success redirect={onRedirect} />}
         <div className={classes.side}>
           <h2 className={classes.title}>Get In Touch</h2>
           <div className={classes.row}>

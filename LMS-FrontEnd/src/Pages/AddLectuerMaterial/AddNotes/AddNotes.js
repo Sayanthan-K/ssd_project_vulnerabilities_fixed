@@ -18,9 +18,11 @@ const AddNotes = (props) => {
     if (MaterialID) {
       axios
         .get(
-          "http://localhost:5000/admin/get_material?materialID=" + MaterialID,{
-            withCredentials:true
-          })
+          "http://localhost:5000/admin/get_material?materialID=" + MaterialID,
+          {
+            withCredentials: true,
+          }
+        )
         .then((resp) => {
           if (resp.data.auth === false) {
             dispatch(logout());
@@ -63,8 +65,9 @@ const AddNotes = (props) => {
   const onNotesSubmit = (e) => {
     setLoaded("SAVING...");
     e.preventDefault();
-
-    if (!notes.trim() && notes.length < 40) {
+    // Output sanitization check
+    const sanitizednotes = sanitizeInput(notes);
+    if (!sanitizednotes.trim() && sanitizednotes.length < 40) {
       setError("notes shout be more longer");
       setLoaded("SAVE");
       return;
@@ -88,15 +91,15 @@ const AddNotes = (props) => {
       _id: MaterialID ? MaterialID : null,
       type: "notes",
       week: week,
-      title: notes,
+      title: sanitizednotes,
       visibility: visibleRef,
       date_time: datetime,
     };
 
     if (!MaterialID) {
       axios
-        .post("http://localhost:5000/admin/add_material", material,{
-          withCredentials:true
+        .post("http://localhost:5000/admin/add_material", material, {
+          withCredentials: true,
         })
         .then((resp) => {
           if (resp.data.auth === false) {
@@ -113,8 +116,8 @@ const AddNotes = (props) => {
         });
     } else {
       axios
-        .post("http://localhost:5000/admin/edit_notes", material,{
-          withCredentials:true
+        .post("http://localhost:5000/admin/edit_notes", material, {
+          withCredentials: true,
         })
         .then((resp) => {
           if (resp.data.auth === false) {
@@ -133,17 +136,27 @@ const AddNotes = (props) => {
 
   const onRedirect = () => {
     if (MaterialID) {
-      history.goBack()
+      history.goBack();
     } else {
       axios
-        .get("http://localhost:5000/admin/get_module?week=" + week,{
-          withCredentials:true
+        .get("http://localhost:5000/admin/get_module?week=" + week, {
+          withCredentials: true,
         })
         .then((res) => {
           setLoaded("SAVE");
           history.replace("/my-courses/" + res.data[0].module);
         });
     }
+  };
+
+  // Output Sanitizes function
+  const sanitizeInput = (input) => {
+    return input
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#39;");
   };
 
   return (
