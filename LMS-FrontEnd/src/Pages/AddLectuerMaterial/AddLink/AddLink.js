@@ -19,9 +19,11 @@ const AddLink = (props) => {
     if (MaterialID) {
       axios
         .get(
-          "http://localhost:5000/admin/get_material?materialID=" + MaterialID,{
-            withCredentials:true
-          })
+          "http://localhost:5000/admin/get_material?materialID=" + MaterialID,
+          {
+            withCredentials: true,
+          }
+        )
         .then((resp) => {
           if (resp.data.auth === false) {
             dispatch(logout());
@@ -65,6 +67,9 @@ const AddLink = (props) => {
 
   const onSubmitted = (event) => {
     event.preventDefault();
+    // Output sanitization check
+    const sanitizedtitle = sanitizeInput(title);
+    const sanitizedlink = sanitizeInput(link);
     setLoaded("SAVING...");
 
     var currentdate = new Date();
@@ -80,12 +85,12 @@ const AddLink = (props) => {
       currentdate.getMinutes() +
       ":" +
       currentdate.getSeconds();
-
-    if (!(link.includes("http") || link.includes("https"))) {
+    // Input validation
+    if (!(sanitizedlink.includes("http") || sanitizedlink.includes("https"))) {
       setError("please input a valid link");
       setLoaded("SAVE");
       return;
-    } else if (!title.trim()) {
+    } else if (!sanitizedtitle.trim()) {
       setError("please input a valid title");
       setLoaded("SAVE");
       return;
@@ -94,8 +99,8 @@ const AddLink = (props) => {
       _id: MaterialID ? MaterialID : undefined,
       type: "link",
       week: week,
-      title: title,
-      link: link,
+      title: sanitizedtitle,
+      link: sanitizedlink,
       visibility: visibleRef,
       date_time: datetime,
     };
@@ -104,8 +109,8 @@ const AddLink = (props) => {
       console.log(error);
       if (!MaterialID) {
         axios
-          .post("http://localhost:5000/admin/add_material", material,{
-            withCredentials:true
+          .post("http://localhost:5000/admin/add_material", material, {
+            withCredentials: true,
           })
           .then((resp) => {
             if (resp.data.auth === false) {
@@ -121,8 +126,8 @@ const AddLink = (props) => {
           });
       } else {
         axios
-          .post("http://localhost:5000/admin/edit_link", material,{
-            withCredentials:true
+          .post("http://localhost:5000/admin/edit_link", material, {
+            withCredentials: true,
           })
           .then((resp) => {
             if (resp.data.auth === false) {
@@ -147,13 +152,22 @@ const AddLink = (props) => {
       history.goBack();
     } else {
       axios
-        .get("http://localhost:5000/admin/get_module?week=" + week,{
-          withCredentials:true
+        .get("http://localhost:5000/admin/get_module?week=" + week, {
+          withCredentials: true,
         })
         .then((res) => {
           history.replace("/my-courses/" + res.data[0].module);
         });
     }
+  };
+  // Output Sanitizes function
+  const sanitizeInput = (input) => {
+    return input
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#39;");
   };
 
   return (
@@ -182,7 +196,7 @@ const AddLink = (props) => {
         </label>
         <br />
         <input
-        placeholder="title.."
+          placeholder="title.."
           required
           value={title}
           onChange={titleHandler}
