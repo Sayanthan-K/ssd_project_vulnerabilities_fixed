@@ -17,15 +17,26 @@ const ContactUs = () => {
 
   const submit = (event) => {
     event.preventDefault();
-
-    if (!email.trim() || !email.includes("@") || !email.endsWith(".com")) {
+    // Output sanitization check
+    const sanitizedEmail = sanitizeInput(email);
+    const sanitizedName = sanitizeInput(name);
+    const sanitizedMessage = sanitizeInput(message);
+    // Input validation
+    if (
+      !sanitizedEmail.trim() ||
+      !sanitizedEmail.includes("@") ||
+      !sanitizedEmail.endsWith(".com")
+    ) {
       setError("Required valid email!");
       return;
-    } else if (!name.trim()) {
+    } else if (!sanitizedName.trim()) {
       setError("Required valid name");
       return;
-    } else if (!message.trim() || message.length < 10) {
+    } else if (!sanitizedMessage.trim()) {
       setError("Required valid message");
+      return;
+    } else if (sanitizedMessage.length < 10) {
+      setError("Required more length  message");
       return;
     }
 
@@ -53,11 +64,15 @@ const ContactUs = () => {
     };
 
     axios
-      .post("http://localhost:5000/contact_us/query", { data },{
-        withCredentials:true
-      })
+      .post(
+        "http://localhost:5000/contact_us/query",
+        { data },
+        {
+          withCredentials: true,
+        }
+      )
       .then((res) => {
-        console.log(res)
+        console.log(res);
         if (res.data.created) {
           setSubmitted(false);
         } else {
@@ -66,7 +81,7 @@ const ContactUs = () => {
         }
       })
       .catch((error) => {
-        console.log(error)
+        console.log(error);
         setError("Unable to submit! retry again");
         setSubmitted(false);
       });
@@ -82,6 +97,15 @@ const ContactUs = () => {
   };
   const clickedHandler = () => {
     setError(null);
+  };
+  // Output Sanitizes function
+  const sanitizeInput = (input) => {
+    return input
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#39;");
   };
 
   return (
@@ -119,7 +143,7 @@ const ContactUs = () => {
           <form onSubmit={submit}>
             <label className={classes.labels}>Name</label>
             <input
-              required
+              // required
               value={name}
               onChange={namehandler}
               type="text"
@@ -128,7 +152,7 @@ const ContactUs = () => {
             />
             <label className={classes.labels}>Email</label>
             <input
-              required
+              // required
               value={email}
               onChange={emailHandler}
               type="mail"
@@ -137,7 +161,7 @@ const ContactUs = () => {
             />
             <label className={classes.labels}>Message</label>
             <textarea
-              required
+              // required
               value={message}
               onChange={messageHandler}
               type="text"

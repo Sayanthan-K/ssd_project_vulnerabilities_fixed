@@ -28,8 +28,8 @@ const Addcourse = (props) => {
       setEdit(true);
       setBtn("SAVE");
       axios
-        .get("http://localhost:5000/course/getcourse?id=" + courseid,{
-          withCredentials:true
+        .get("http://localhost:5000/course/getcourse?id=" + courseid, {
+          withCredentials: true,
         })
         .then((res) => {
           //console.log(res.data._id);
@@ -60,15 +60,18 @@ const Addcourse = (props) => {
   const history = useHistory();
   const onSubmitHandler = (event) => {
     event.preventDefault();
-
-    if (!courseName.trim()) {
+    // Output sanitization check
+    const sanitizedcourseName = sanitizeInput(courseName);
+    const sanitizedcourseID = sanitizeInput(courseID);
+    // Input validation
+    if (!sanitizedcourseName.trim()) {
       setError("invaild coursename!! ");
 
       return;
-    } else if (courseID.trim().length < 8) {
+    } else if (sanitizedcourseID.trim().length < 8) {
       setError("please enter 8 digit courseID!!!");
       return;
-    } else if (courseID.trim().length > 8) {
+    } else if (sanitizedcourseID.trim().length > 8) {
       setError(
         "please enter 8 digit courseID!!! don't enter greater than 8 digit"
       );
@@ -76,8 +79,8 @@ const Addcourse = (props) => {
     }
     const coursedata = {
       _id: courseid ? courseid : null,
-      courseID: courseID,
-      coursename: courseName,
+      courseID: sanitizedcourseID,
+      coursename: sanitizedcourseName,
       courseIncharge: courseIncharge,
       courseDuration: courseDuration,
       courseYear: courseYear,
@@ -88,12 +91,16 @@ const Addcourse = (props) => {
     if (!courseid) {
       setBtn("ADD..");
       axios
-        .post("http://localhost:5000/course/addcourse", {
-          data: coursedata,
-          facultyID: facultyID,
-        },{
-          withCredentials:true
-        })
+        .post(
+          "http://localhost:5000/course/addcourse",
+          {
+            data: coursedata,
+            facultyID: facultyID,
+          },
+          {
+            withCredentials: true,
+          }
+        )
 
         .then((res) => {
           setSuccess(true);
@@ -110,8 +117,8 @@ const Addcourse = (props) => {
     } else {
       setBtn("SAVE..");
       axios
-        .put("http://localhost:5000/course/Updatecourse", coursedata,{
-          withCredentials:true
+        .put("http://localhost:5000/course/Updatecourse", coursedata, {
+          withCredentials: true,
         })
         .then((res) => {
           // history.replace("/faculties");
@@ -138,6 +145,16 @@ const Addcourse = (props) => {
           console.log(er);
         });
     }
+  };
+  // Output Sanitizes function
+  // Sanitizes function user input to prevent Cross-Site Scripting (XSS) attacks
+  const sanitizeInput = (input) => {
+    return input
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#39;");
   };
 
   const [courseName, setcourseNameHandler] = useState();

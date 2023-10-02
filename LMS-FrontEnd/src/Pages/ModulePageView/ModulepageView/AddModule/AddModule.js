@@ -25,8 +25,8 @@ const AddModule = (props) => {
       setBtn("SAVE");
 
       axios
-        .get("http://localhost:5000/Module/get_module?moduleID=" + moduleID,{
-          withCredentials:true
+        .get("http://localhost:5000/Module/get_module?moduleID=" + moduleID, {
+          withCredentials: true,
         })
         .then((res) => {
           if (res.data.auth === false) {
@@ -56,7 +56,11 @@ const AddModule = (props) => {
 
   const onSubmitModule = (event) => {
     event.preventDefault();
-
+    // Output sanitization check
+    const sanitizedModuleName = sanitizeInput(ModuleName);
+    const sanitizedModuleCode = sanitizeInput(ModuleCode);
+    const sanitizedModuleEnrollmentkey = sanitizeInput(ModuleEnrollmentkey);
+    // Input validation
     if (ModuleCode.trim().length < 6) {
       setError("please enter 6 digit ModuleCode!!");
 
@@ -64,10 +68,10 @@ const AddModule = (props) => {
     } else if (ModuleEnrollmentkey.trim().length < 6) {
       setError(" please enter 6 digit ModuleEnrollmentkey!!! ");
       return;
-    } else if (ModuleCode.trim().length > 6) {
+    } else if (sanitizedModuleCode.trim().length > 6) {
       setError("please enter 6 digit ModuleCode!!! don't enter more than 6");
       return;
-    } else if (ModuleEnrollmentkey.trim().length > 6) {
+    } else if (sanitizedModuleEnrollmentkey.trim().length > 6) {
       setError(
         "please enter 6 digit ModuleEnrollmentkey!!! don't enter more than 6"
       );
@@ -82,10 +86,10 @@ const AddModule = (props) => {
         "please enter 8 - 18 range ModuleWeekCounts !!! don't enter greater than 18"
       );
       return;
-    } else if (ModuleEnrollmentkey === ModuleCode) {
+    } else if (sanitizedModuleEnrollmentkey === sanitizedModuleCode) {
       setError("please enter different 'ModuleCode' and 'ModuleEnrollmentkey'");
       return;
-    } else if (!ModuleName.trim()) {
+    } else if (!sanitizedModuleName.trim()) {
       setError("invaild ModuleName");
       return;
     }
@@ -93,9 +97,9 @@ const AddModule = (props) => {
     const Moduledata = {
       _id: moduleID ? moduleID : undefined,
       courseID,
-      Modulename: ModuleName,
-      ModuleCode: ModuleCode,
-      ModuleEnrollmentkey: ModuleEnrollmentkey,
+      Modulename: sanitizedModuleName,
+      ModuleCode: sanitizedModuleCode,
+      ModuleEnrollmentkey: sanitizedModuleEnrollmentkey,
       ModuleWeekCounts: ModuleWeekCounts,
       ModuleLectureIncharge: ModuleLectureIncharge,
       year,
@@ -104,12 +108,16 @@ const AddModule = (props) => {
     if (!moduleID) {
       setBtn("ADD..");
       axios
-        .post("http://localhost:5000/Module/addModule", {
-          data: Moduledata,
-          courseID: courseID
-        },{
-          withCredentials:true
-        })
+        .post(
+          "http://localhost:5000/Module/addModule",
+          {
+            data: Moduledata,
+            courseID: courseID,
+          },
+          {
+            withCredentials: true,
+          }
+        )
 
         .then((res) => {
           // setError("successfully created Module !!");
@@ -129,8 +137,8 @@ const AddModule = (props) => {
     } else {
       setBtn("SAVE..");
       axios
-        .put("http://localhost:5000/Module/UpdateModule", Moduledata,{
-          withCredentials:true
+        .put("http://localhost:5000/Module/UpdateModule", Moduledata, {
+          withCredentials: true,
         })
         .then((res) => {
           if (res.data.auth === false) {
@@ -198,6 +206,16 @@ const AddModule = (props) => {
     setModuleLectureInchargeHandler(event.target.value);
   };
 
+  // Output Sanitizes function
+  const sanitizeInput = (input) => {
+    return input
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#39;");
+  };
+
   return (
     <div className={classes.squareview}>
       {error && <ErrorPopup clickedHandler={clickedHandler} error={error} />}
@@ -246,7 +264,7 @@ const AddModule = (props) => {
         </label>
         <br />
         <input
-          type="text"
+          type="number"
           id=" ModuleWeekCounts"
           name="companyName"
           className={classes.inputs}

@@ -2,9 +2,9 @@ import classes from "./AddFaculties.module.css";
 import { useState } from "react";
 import axios from "axios";
 import { useHistory } from "react-router";
-import { useEffect } from "react";
 import ErrorPopup from "../../../Components/ErrorPopup/ErrorPopup";
 import { useSelector, useDispatch } from "react-redux";
+import { useEffect } from "react";
 import { logout } from "../../../Store/auth";
 import Success from "../../../Components/SuccessPopup/Success";
 
@@ -16,9 +16,13 @@ const AddFaculties = (props) => {
   const [edit, setEdit] = useState(false);
   const [btn, setBtn] = useState("ADD");
   const [error, setError] = useState(null);
-  const [update, setupdate] = useState(false);
+  const [update, setUpdate] = useState(false);
   const token = useSelector((state) => state.loging.token);
   const [success, setSuccess] = useState(false);
+
+  const [name, setName] = useState("");
+  const [facultyid, setFacultyId] = useState("");
+  const [Incharge, setIncharge] = useState("");
 
   useEffect(() => {
     if (!id) {
@@ -27,8 +31,8 @@ const AddFaculties = (props) => {
       // setEdit(true);
       setBtn("SAVE");
       axios
-        .get("http://localhost:5000/Faculty/getfaculty?id=" + id,{
-          withCredentials:true
+        .get("http://localhost:5000/Faculty/getfaculty?id=" + id, {
+          withCredentials: true,
         })
         .then((res) => {
           if (res.data.auth === false) {
@@ -42,9 +46,9 @@ const AddFaculties = (props) => {
             //setIsUploaded(false);
             history.replace("/faculties");
           } else {
-            setNamehandlder(res.data.name);
-            setidhandlder(res.data.id);
-            setInchargehandlder(res.data.Incharge);
+            setName(res.data.name);
+            setFacultyId(res.data.id);
+            setIncharge(res.data.Incharge);
           }
         })
         .catch((er) => {
@@ -53,117 +57,95 @@ const AddFaculties = (props) => {
     }
   }, []);
 
-  const onSubmitHandler = (event) => {
+  const onSubmitHandler = async (event) => {
     event.preventDefault();
-
-    // if (name.length === 0 && Incharge.length === 0 && id.length === 0) {
-    //   setError("invaild facultyname 1!! ");
-
-    //   return;
-    // }else
-
-    if (!name.trim() ) {
-      setError("invaild facultyname!! ");
-
+    // Output sanitization check
+    const sanitizedName = sanitizeInput(name);
+    const sanitizedIncharge = sanitizeInput(Incharge);
+    const sanitizedFacultyId = sanitizeInput(facultyid);
+    // Input Validation
+    if (!sanitizedName.trim()) {
+      setError("Required valid faculty name!!");
       return;
-    } else if (!Incharge.trim()) {
-      setError("please enter facultyIncharge!!!");
+    } else if (!sanitizedIncharge.trim()) {
+      setError("Required valid faculty Incharge!!!");
       return;
-    } else if (!facultyid.trim()) {
-      setError("please enter facultyid!!!");
+    } else if (!sanitizedFacultyId.trim()) {
+      setError("Required valid faculty id!!!");
       return;
-    } else if (facultyid.trim().length < 8) {
-      setError("please enter 8 digit FacultyID");
-
+    } else if (sanitizedFacultyId.trim().length !== 8) {
+      setError("Required valid and 8-digit Faculty ID");
       return;
     }
 
     const Facultydata = {
       _id: id ? id : null,
-      id: facultyid,
-      name: name,
-      Incharge: Incharge,
+      id: sanitizedFacultyId,
+      name: sanitizedName,
+      Incharge: sanitizedIncharge,
       courses: [],
     };
 
     if (!id) {
-      setBtn("ADD..");
-      axios
-        .post("http://localhost:5000/Faculty/addFaculty", Facultydata,{
-          withCredentials:true
-        })
-        .then((res) => {
-          if (res.data.auth === false) {
-            setError("You Are not Authorized to Create Jobs !");
-            // setIsUploaded(false);
-            setTimeout(() => {
-              dispatch(logout());
-            }, 300);
-          } else if (res.data.insert === true) {
-            //setIsUploaded(false);
-            // history.replace("/faculties");
-            setSuccess(true);
-            setTimeout(() => {
-              setSuccess(true);
-              history.replace("/faculties");
-            }, 2200);
-          } else if (res.data.insert === false) {
-            setError("Unable to add details, try again !");
+      setBtn("ADDING...");
+      try {
+        const response = await axios.post(
+          "http://localhost:5000/Faculty/addFaculty",
+          Facultydata,
+          {
+            withCredentials: true,
           }
-        })
-        .catch((er) => {
-          console.log(er);
-        });
+        );
+        handleResponse(response);
+      } catch (error) {
+        console.error(error);
+      }
     } else {
       setBtn("SAVE..");
-      axios
-        .put("http://localhost:5000/Faculty/UpdateFaculty", Facultydata,{
-          withCredentials:true
-        })
-        .then((res) => {
-          if (res.data.auth === false) {
-            setError("You Are not Authorized to Create faculty !");
-            // setIsUploaded(false);
-            setTimeout(() => {
-              dispatch(logout());
-            }, 1600);
-          } else if (res.data.uploaded === true) {
-            // history.replace("/faculties");
-            // //setSuccess(true);
-            setSuccess(true);
-
-            setTimeout(() => {
-              setSuccess(true);
-              history.replace("/faculties");
-            }, 2200);
-          } else if (res.data.uploaded === false) {
-            //setIsUploaded(false);
-            // history.replace("/faculties");
-            setError("You Are nothing to Update, make changes!");
+      try {
+        const response = await axios.put(
+          "http://localhost:5000/Faculty/UpdateFaculty",
+          Facultydata,
+          {
+            withCredentials: true,
           }
-        })
-        .catch((er) => {
-          console.log(er);
-        });
+        );
+        handleResponse(response);
+      } catch (error) {
+        console.error(error);
+      }
     }
   };
 
-  const [name, setNamehandlder] = useState();
-  const [facultyid, setidhandlder] = useState();
-  const [Incharge, setInchargehandlder] = useState();
-  const clickedHandler = (event) => {
+  const handleResponse = (response) => {
+    if (response.data.auth === false) {
+      setError("You Are not Authorized!");
+      setTimeout(() => {
+        dispatch(logout());
+      }, 1600);
+    } else if (response.data.uploaded === true) {
+      setSuccess(true);
+      setTimeout(() => {
+        history.replace("/faculties");
+      }, 2200);
+    } else {
+      setError("Unable to update. Please make changes!");
+    }
+  };
+  // Output Sanitizes function
+  const sanitizeInput = (input) => {
+    return input
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#39;");
+  };
+
+  const clickedHandler = () => {
     setError(null);
   };
 
-  const Namehandlder = (event) => {
-    setNamehandlder(event.target.value);
-  };
-  const IDhandlder = (event) => {
-    setidhandlder(event.target.value);
-  };
-  const Inchargehandlder = (event) => {
-    setInchargehandlder(event.target.value);
-  };
   const onRedirect = () => {
     window.location.reload();
   };
@@ -172,12 +154,13 @@ const AddFaculties = (props) => {
     <div className={classes.squareview}>
       {error && <ErrorPopup clickedHandler={clickedHandler} error={error} />}
       {success && <Success redirect={onRedirect} />}
-      <h2 className={classes.title}>Add Faculties</h2>
+      {id && <h2 className={classes.title}>Edit Faculties</h2>}
+      {!id && <h2 className={classes.title}>ADD Faculties</h2>}
 
       <hr className={classes.line}></hr>
       <form className={classes.formContainer} onSubmit={onSubmitHandler}>
-        <label for="FacultieName" className={classes.lables}>
-          FacultieName :
+        <label htmlFor="FacultieName" className={classes.labels}>
+          Faculty Name :
         </label>
         <br />
         <input
@@ -185,12 +168,12 @@ const AddFaculties = (props) => {
           id="FacultieName"
           name="FacultieName"
           className={classes.inputs}
-          onChange={Namehandlder}
+          onChange={(e) => setName(e.target.value)}
           value={name}
         />
 
-        <label for="FacultieID" className={classes.lables}>
-          Facultie ID
+        <label htmlFor="FacultieID" className={classes.labels}>
+          Faculty ID :
         </label>
         <br />
         <input
@@ -198,12 +181,12 @@ const AddFaculties = (props) => {
           id="FacultieID"
           name="FacultieID"
           className={classes.inputs}
-          onChange={IDhandlder}
+          onChange={(e) => setFacultyId(e.target.value)}
           value={facultyid}
         />
 
-        <label for="FacultieIncharge" className={classes.lables}>
-          Facultie Incharge :
+        <label htmlFor="FacultieIncharge" className={classes.labels}>
+          Faculty Incharge :
         </label>
         <br />
         <select
@@ -211,9 +194,9 @@ const AddFaculties = (props) => {
           name="faculty"
           className={classes.inputs1}
           value={Incharge}
-          onChange={Inchargehandlder}
+          onChange={(e) => setIncharge(e.target.value)}
         >
-          <option selected="true" value="" hidden></option>
+          <option value="" hidden></option>
           <option value="DR.Kamal">DR.Kamal</option>
           <option value="pro.Nirupa">Prof.Nirupa</option>
           <option value="DR.Kumara">DR.Kumara</option>
@@ -225,4 +208,5 @@ const AddFaculties = (props) => {
     </div>
   );
 };
+
 export default AddFaculties;

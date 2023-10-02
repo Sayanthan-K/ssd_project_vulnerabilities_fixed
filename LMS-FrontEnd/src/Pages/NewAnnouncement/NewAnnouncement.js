@@ -23,9 +23,12 @@ const NewAnnouncement = (props) => {
       setEdit(true);
       console.log("aaa");
       axios
-        .get("http://localhost:5000/announcement/get_announcement?ID=" + annID,{
-          withCredentials:true
-        })
+        .get(
+          "http://localhost:5000/announcement/get_announcement?ID=" + annID,
+          {
+            withCredentials: true,
+          }
+        )
         .then((res) => {
           if (res.data.error !== true) {
             setSubject(res.data.subject);
@@ -44,6 +47,9 @@ const NewAnnouncement = (props) => {
   const submitHandler = (event) => {
     event.preventDefault();
     const data = new FormData();
+    // Output sanitization check
+    const sanitizedsubject = sanitizeInput(subject);
+    const sanitizedmessage = sanitizeInput(message);
 
     var currentdate = new Date();
     var date =
@@ -59,7 +65,7 @@ const NewAnnouncement = (props) => {
       currentdate.getMinutes() +
       ":" +
       currentdate.getSeconds();
-
+    // Input validation
     if (!subject.trim()) {
       setError("Invalid Subject");
       return;
@@ -74,16 +80,16 @@ const NewAnnouncement = (props) => {
     data.append("details", file);
     data.append("_id", annID ? annID : undefined);
     data.append("edit", edit);
-    data.append("subject", subject);
-    data.append("message", message);
+    data.append("subject", sanitizedsubject);
+    data.append("message", sanitizedmessage);
     data.append("date", date);
     data.append("time", time);
     data.append("author", "News Admin");
 
     setBtn("SAVING...");
     axios
-      .post("http://localhost:5000/announcement/add_announcement", data,{
-        withCredentials:true
+      .post("http://localhost:5000/announcement/add_announcement", data, {
+        withCredentials: true,
       })
       .then((res) => {
         console.log(res.data);
@@ -115,9 +121,11 @@ const NewAnnouncement = (props) => {
   const onDelete = () => {
     axios
       .delete(
-        "http://localhost:5000/announcement/delete_announcement?ID=" + annID,{
-          withCredentials:true
-        })
+        "http://localhost:5000/announcement/delete_announcement?ID=" + annID,
+        {
+          withCredentials: true,
+        }
+      )
       .then((res) => {
         setClicked(false);
         history.replace("/dashboard");
@@ -126,6 +134,15 @@ const NewAnnouncement = (props) => {
         setClicked(false);
         console.log(er);
       });
+  };
+  // Output Sanitizes function
+  const sanitizeInput = (input) => {
+    return input
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#39;");
   };
 
   return (

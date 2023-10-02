@@ -57,7 +57,7 @@ import { useSelector } from "react-redux";
 
 function App() {
   const isLogedIn = useSelector((state) => state.loging.isLogedIn);
-  const type = useSelector((state) => state.loging.type);
+
   return (
     <Provider store={store}>
       <Router>
@@ -219,16 +219,13 @@ function App() {
               path="/dashboard/new_announcement"
               exact
               component={NewAnnouncement}
-            >
-              {type !== "admin" && <Redirect to="/dashboard" />}
-            </Route>
+            />
+
             <Route
               path="/dashboard/edit_announcement/:annID"
               exact
               component={NewAnnouncement}
-            >
-              {type !== "admin" && <Redirect to="/dashboard" />}
-            </Route>
+            />
 
             <Route path="/index" exact component={Login}>
               {isLogedIn && <Redirect to="/dashboard" />}

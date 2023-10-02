@@ -33,8 +33,8 @@ const EditProfile = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:5000/user/get_user?ID=" + userID,{
-        withCredentials:true
+      .get("http://localhost:5000/user/get_user?ID=" + userID, {
+        withCredentials: true,
       })
       .then((res) => {
         if (res.data.auth === false) {
@@ -67,8 +67,8 @@ const EditProfile = () => {
   const onDeleteBtn = () => {
     // setError(null)
     axios
-      .delete("http://localhost:5000/user/delete_user?ID", userID,{
-        withCredentials:true
+      .delete("http://localhost:5000/user/delete_user?ID", userID, {
+        withCredentials: true,
       })
       .then((res) => {
         if (res.data.ack === true) {
@@ -109,11 +109,18 @@ const EditProfile = () => {
   };
   const editHandler = (event) => {
     event.preventDefault();
-
-    if (!name.trim() || name.length < 5) {
+    // Output sanitization check
+    const sanitizedname = sanitizeInput(name);
+    const sanitizedcontact = sanitizeInput(contact);
+    const sanitizedpassword = sanitizeInput(password);
+    const sanitizednewpassword = sanitizeInput(newpassword);
+    const sanitizedaddress = sanitizeInput(address);
+    const sanitizedbio = sanitizeInput(bio);
+    // Input validation
+    if (!sanitizedname.trim() || sanitizedname.length < 5) {
       setError("invalid Name");
       return;
-    } else if (!contact.trim() || contact.length !== 10) {
+    } else if (!sanitizedcontact.trim() || sanitizedcontact.length !== 10) {
       setError("Invalid Contact Number");
       return;
     } else if (password || newpassword) {
@@ -121,7 +128,6 @@ const EditProfile = () => {
       newpassword && newpassword.trim();
       if (password !== newpassword) {
         setError("passwords does not match");
-        return;
         return;
       } else if (password.length < 6) {
         setError("password length is not enough");
@@ -131,16 +137,16 @@ const EditProfile = () => {
     setBtn("SAVING..");
     const data = {
       _id: userID,
-      name: name.trim(),
-      address: address ? address.trim() : null,
-      contact: contact,
-      password: password ? password : oldpassword,
-      bio: bio ? bio.trim() : null,
+      name: sanitizedname.trim(),
+      address: sanitizedaddress ? sanitizedaddress.trim() : null,
+      contact: sanitizedcontact,
+      password: sanitizedpassword ? sanitizedpassword : oldpassword,
+      bio: sanitizedbio ? sanitizedbio.trim() : null,
     };
 
     axios
-      .post("http://localhost:5000/user/edit_user", data,{
-        withCredentials:true
+      .post("http://localhost:5000/user/edit_user", data, {
+        withCredentials: true,
       })
       .then((res) => {
         if (res.data.auth === false) {
@@ -165,8 +171,8 @@ const EditProfile = () => {
 
     setFileBtn("SAVING...");
     axios
-      .post("http://localhost:5000/user/add_dp", dp,{
-        withCredentials:true
+      .post("http://localhost:5000/user/add_dp", dp, {
+        withCredentials: true,
       })
       .then((res) => {
         if (res.data.auth === false) {
@@ -190,6 +196,15 @@ const EditProfile = () => {
 
   const onRedirect = () => {
     window.location.reload();
+  };
+  // Output Sanitizes function
+  const sanitizeInput = (input) => {
+    return input
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#39;");
   };
   return (
     <div className={classes.container}>
