@@ -1,19 +1,21 @@
-import classes from "./Login.module.css";
-import std from "../../Assets/std.png";
-import { useState } from "react";
-import axios from "axios";
-import { useDispatch } from "react-redux";
-import { login } from "../../Store/auth";
-import { useHistory } from "react-router";
-import DescriptionAlerts from "../../Components/alertMsg/Alert";
+import classes from './Login.module.css';
+import std from '../../Assets/std.png';
+import { useState } from 'react';
+import axios from 'axios';
+import { useDispatch } from 'react-redux';
+import { login } from '../../Store/auth';
+import { useHistory } from 'react-router';
+import DescriptionAlerts from '../../Components/alertMsg/Alert';
+
+import { GoogleLogin } from '@react-oauth/google';
 
 const Login = () => {
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
   const [unAuth, setUnAuth] = useState(false);
   const [openSnackbar, setOpenSnackbar] = useState(false);
-  const [severity, setSeverity] = useState("");
-  const [alertMessage, setAlertMessage] = useState("");
+  const [severity, setSeverity] = useState('');
+  const [alertMessage, setAlertMessage] = useState('');
 
   const dispatch = useDispatch();
   const history = useHistory();
@@ -30,8 +32,8 @@ const Login = () => {
     // Input validation
     if (
       !sanitizedEmail.trim() ||
-      !sanitizedEmail.includes("@") ||
-      !sanitizedEmail.endsWith(".com")
+      !sanitizedEmail.includes('@') ||
+      !sanitizedEmail.endsWith('.com')
     ) {
       setUnAuth(true);
       return;
@@ -41,7 +43,7 @@ const Login = () => {
     }
     axios
       .post(
-        "http://localhost:5000/user/login",
+        'http://localhost:5000/user/login',
         {
           email: email,
           password: password,
@@ -62,7 +64,7 @@ const Login = () => {
               lmsID: res.data.details.ID,
             })
           );
-          history.replace("/dashboard");
+          history.replace('/dashboard');
         } else {
           setUnAuth(true);
         }
@@ -70,7 +72,7 @@ const Login = () => {
       .catch((er) => {
         console.log(er);
         setAlertMessage(er?.response?.data?.message);
-        setSeverity("error");
+        setSeverity('error');
         setOpenSnackbar(true);
       });
   };
@@ -85,11 +87,52 @@ const Login = () => {
   // Output Sanitizes function
   const sanitizeInput = (input) => {
     return input
-      .replace(/&/g, "&amp;")
-      .replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;")
-      .replace(/"/g, "&quot;")
-      .replace(/'/g, "&#39;");
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  };
+
+  const responseMessage = (response) => {
+    axios
+      .post(
+        'http://localhost:5000/user/google_login',
+        {
+          credential: response.credential,
+        },
+        {
+          withCredentials: true,
+        }
+      )
+      .then((res) => {
+        if (res.data.auth === true) {
+          console.log('getting id id' + res.data.details);
+          console.log(res.data.details);
+          dispatch(
+            login({
+              email: email,
+              type: res.data.details.type,
+              id: res.data.details._id,
+              name: res.data.details.name,
+              token: res.data.token,
+              lmsID: res.data.details.ID,
+            })
+          );
+          history.replace('/dashboard');
+        } else {
+          setUnAuth(true);
+        }
+      })
+      .catch((er) => {
+        console.log(er);
+        setAlertMessage(er?.response?.data?.message);
+        setSeverity('error');
+        setOpenSnackbar(true);
+      });
+  };
+  const errorMessage = (error) => {
+    console.log(error);
   };
   return (
     <div className={classes.login_container}>
@@ -102,36 +145,38 @@ const Login = () => {
       <div className={classes.login}>
         <h2 className={classes.title}>Log In</h2>
         <form onSubmit={submitHandler} className={classes.form_container}>
-          <label className={classes.labels} htmlFor={"username"}>
+          <label className={classes.labels} htmlFor={'username'}>
             UserName
           </label>
           <br />
           <input
             value={email}
             onChange={emailhandler}
-            type="text"
+            type='text'
             required
-            id="username"
+            id='username'
             className={classes.inputs}
           />
           <br />
-          <label className={classes.labels} htmlFor={"password"}>
+          <label className={classes.labels} htmlFor={'password'}>
             Password
           </label>
           <br />
           <input
             value={password}
             onChange={passwordGHandler}
-            type="password"
+            type='password'
             required
-            id="password"
+            id='password'
             className={classes.inputs}
           />
           <br />
-          <a href={"/index/reset_password"} className={classes.forgot}>
+          <a href={'/index/reset_password'} className={classes.forgot}>
             Forgot Password?
           </a>
           <button className={classes.btn}>LOG IN</button>
+
+          <GoogleLogin onSuccess={responseMessage} onError={errorMessage} />
           {unAuth && <div className={classes.errorShow}>Invalid Details !</div>}
         </form>
       </div>

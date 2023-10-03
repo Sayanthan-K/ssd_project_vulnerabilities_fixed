@@ -1,42 +1,42 @@
-const Router = require("express").Router;
+const Router = require('express').Router;
 const router = Router();
-const fileUpload = require("express-fileupload");
+const fileUpload = require('express-fileupload');
 router.use(fileUpload());
-const Profile = require("../Controller/User");
-const loginLimiter = require('../Middleware/loginLimiter')
+const Profile = require('../Controller/User');
+const loginLimiter = require('../Middleware/loginLimiter');
 
+router.post('/login', loginLimiter, Profile.Login);
 
-router.post("/login",loginLimiter, Profile.Login);
+router.post('/google_login', loginLimiter, Profile.GoogleLogin);
 
-router.get("/refresh", Profile.refresh);
+router.get('/refresh', Profile.refresh);
 
-router.post("/logout", Profile.logout);
+router.post('/logout', Profile.logout);
 
-router.get("/check_mail/", Profile.CheckMail);
+router.get('/check_mail/', Profile.CheckMail);
 
-router.post("/check_otp", Profile.CheckOTP);
+router.post('/check_otp', Profile.CheckOTP);
 
-router.post("/find_user", Profile.FindUser);
+router.post('/find_user', Profile.FindUser);
 
-router.get("/get_user/", Profile.GetUser);
+router.get('/get_user/', Profile.GetUser);
 
-router.post("/edit_user", Profile.EditUser);
+router.post('/edit_user', Profile.EditUser);
 
-router.post("/add_dp", Profile.AddDP);
+router.post('/add_dp', Profile.AddDP);
 
-router.get("/dp/", Profile.GetDP);
+router.get('/dp/', Profile.GetDP);
 
-router.delete("/delete_user/", Profile.DeleteUser);
+router.delete('/delete_user/', Profile.DeleteUser);
 
-router.get("/get_modules/", Profile.GetModules);
+router.get('/get_modules/', Profile.GetModules);
 
-router.post("/unenroll", Profile.Unenroll);
+router.post('/unenroll', Profile.Unenroll);
 
-router.post("/reset_password", Profile.ResetPass);
+router.post('/reset_password', Profile.ResetPass);
 
-router.get("/check_pass_reset_validity/", Profile.CheckValidity);
+router.get('/check_pass_reset_validity/', Profile.CheckValidity);
 
 // router.get("/getpassword/", Profile.GetPassword);
-
 
 module.exports = router;

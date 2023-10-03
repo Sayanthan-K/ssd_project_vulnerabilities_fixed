@@ -1,35 +1,45 @@
-const mongodb = require("mongodb");
-const db = require("../db");
-const nodemailer = require("nodemailer");
+const mongodb = require('mongodb');
+const db = require('../db');
+const nodemailer = require('nodemailer');
+
+const uuidv4 = require('uuid').v4;
+const bcrypt = require('bcrypt');
+const saltRounds = 10;
 
 //function for generate password for user Registeration
 function generatePassword() {
   var length = 8,
-    charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789",
-    retVal = "";
+    charset = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789',
+    retVal = '';
   for (var i = 0, n = charset.length; i < length; ++i) {
     retVal += charset.charAt(Math.floor(Math.random() * n));
   }
   return retVal;
 }
 
+//hash_password
+function hashPassword(password) {
+  return bcrypt.hashSync(password, saltRounds);
+}
+//compare_password
+
 //function for sendEmail to the User
 function sendEmail(email, pwd) {
-  const h1 = "<h2>Login Details for LMS</h2><hr>";
-  const h2 = h1 + "<h3>UserName: " + email + "<br>Password: " + pwd + "</h3>";
+  const h1 = '<h2>Login Details for LMS</h2><hr>';
+  const h2 = h1 + '<h3>UserName: ' + email + '<br>Password: ' + pwd + '</h3>';
 
   var transporter = nodemailer.createTransport({
-    service: "gmail",
+    service: 'gmail',
     auth: {
-      user: "project2020sliit@gmail.com",
-      pass: "sliit2020",
+      user: 'project2020sliit@gmail.com',
+      pass: 'uowh prgj ywmx ebyt',
     },
   });
 
   var mailOptions = {
-    from: "project2020sliit@gmail.com",
+    from: 'project2020sliit@gmail.com',
     to: email,
-    subject: "Login Details",
+    subject: 'Login Details',
     html: h2,
   };
 
@@ -38,7 +48,7 @@ function sendEmail(email, pwd) {
       console.log(error);
       // return false
     } else {
-      console.log("Email sent: " + info.response);
+      console.log('Email sent: ' + info.response);
       // return true
     }
   });
@@ -52,7 +62,7 @@ exports.GetUserID = (req, res, next) => {
   }
   db.getDb()
     .db()
-    .collection("User")
+    .collection('User')
     .find()
     .toArray()
     .then((resp) => {
@@ -88,29 +98,33 @@ exports.AddUser = (req, res, next) => {
   }
   db.getDb()
     .db()
-    .collection("User")
+    .collection('User')
     .findOne({ email: req.body.email })
     .then((resp) => {
       if (!resp) {
         db.getDb()
           .db()
-          .collection("User")
+          .collection('User')
           .findOne({ contact: req.body.contact })
           .then((resp) => {
             if (resp) {
               res.status(200).json({ contactExist: true });
             } else {
+              new_userid = uuidv4();
+
               password = generatePassword();
+              console.log(password);
+              const hashedPassword = hashPassword(password);
 
               db.getDb()
                 .db()
-                .collection("User")
+                .collection('User')
                 .insertOne({
                   name: req.body.name,
                   email: req.body.email,
-                  password: password,
+                  password: hashedPassword,
                   type: req.body.role,
-                  ID: "LMS" + req.body.userIdNo,
+                  ID: new_userid,
                   IDNo: req.body.userIdNo,
                   date: req.body.date,
                   contact: req.body.contact,
@@ -151,7 +165,7 @@ exports.GetUsers = (req, res, next) => {
 
   db.getDb()
     .db()
-    .collection("User")
+    .collection('User')
     .find()
     .toArray()
     .then((resp) => {
@@ -178,7 +192,7 @@ exports.EditUser = (req, res, next) => {
   }
   db.getDb()
     .db()
-    .collection("User")
+    .collection('User')
     .findOne({ _id: new mongodb.ObjectId(req.query.id) })
     .then((resp) => {
       if (!resp) {
@@ -204,7 +218,7 @@ exports.UpdateUser = (req, res, next) => {
   }
   db.getDb()
     .db()
-    .collection("User")
+    .collection('User')
     .updateOne(
       { _id: new mongodb.ObjectId(req.body._id) },
       {
@@ -216,7 +230,7 @@ exports.UpdateUser = (req, res, next) => {
           address: req.body.address,
           faculty: req.body.faculty,
           type: req.body.type,
-          password: req.body.password,
+          password: hashPassword(req.body.password),
         },
       }
     )
@@ -244,7 +258,7 @@ exports.DeleteUser = (req, res, next) => {
   }
   db.getDb()
     .db()
-    .collection("User")
+    .collection('User')
     .deleteOne({ _id: new mongodb.ObjectId(req.query._id) })
     .then((resp) => {
       if (resp.deletedCount === 1) {

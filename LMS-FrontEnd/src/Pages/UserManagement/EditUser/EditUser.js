@@ -1,12 +1,12 @@
-import classes from "./EditUser.module.css";
-import { useEffect } from "react";
-import { useState } from "react";
-import axios from "axios";
-import { useHistory } from "react-router";
-import { useSelector, useDispatch } from "react-redux";
-import ErrorPopup from "../../../Components/ErrorPopup/ErrorPopup";
-import { logout } from "../../../Store/auth";
-import Success from "../../../Components/SuccessPopup/Success";
+import classes from './EditUser.module.css';
+import { useEffect } from 'react';
+import { useState } from 'react';
+import axios from 'axios';
+import { useHistory } from 'react-router';
+import { useSelector, useDispatch } from 'react-redux';
+import ErrorPopup from '../../../Components/ErrorPopup/ErrorPopup';
+import { logout } from '../../../Store/auth';
+import Success from '../../../Components/SuccessPopup/Success';
 
 const EditUser = (props) => {
   const dispatch = useDispatch();
@@ -31,18 +31,18 @@ const EditUser = (props) => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:5000/userManagement/edit_user?id=" + id,{
-        withCredentials:true
+      .get('http://localhost:5000/userManagement/edit_user?id=' + id, {
+        withCredentials: true,
       })
       .then((res) => {
         if (res.data.auth === false) {
-          setError("You Are not Authorized!");
+          setError('You Are not Authorized!');
           setIsUploaded(false);
           setTimeout(() => {
             dispatch(logout());
           }, 800);
         } else if (res.data.fetch === false) {
-          setError("Requested ID is wrong");
+          setError('Requested ID is wrong');
           setIsUploaded(false);
           setTimeout(() => {
             dispatch(logout());
@@ -69,8 +69,8 @@ const EditUser = (props) => {
           setFaculty(res.data.faculty);
           setRole(res.data.type);
           setPassword(res.data.password);
+          // setPassword('');
         }
-
       })
       .catch((er) => {
         setError("Cann't connect with database");
@@ -84,22 +84,27 @@ const EditUser = (props) => {
   const updateHandler = (event) => {
     event.preventDefault();
 
-    if(name.trim()=="" || dob.trim()=="" || address.trim()=="" || faculty.trim()=="" || role.trim()=="" || password.trim()==""){
-        setError("Check the input field. Fill it");
-        setIsUploaded(false);
-        return;
-    }
-    if(contact.trim()=="" || contact.length !== 10){
-      setError("Invalid Contact Number");
+    if (
+      name.trim() == '' ||
+      dob.trim() == '' ||
+      address.trim() == '' ||
+      faculty.trim() == '' ||
+      role.trim() == '' ||
+      password.trim() == ''
+    ) {
+      setError('Check the input field. Fill it');
       setIsUploaded(false);
       return;
-
     }
-    if(email.trim()=="" || !email.includes("@") || !email.includes(".com")){
-      setError("Invalid Email");
+    if (contact.trim() == '' || contact.length !== 10) {
+      setError('Invalid Contact Number');
       setIsUploaded(false);
       return;
-
+    }
+    if (email.trim() == '' || !email.includes('@') || !email.includes('.com')) {
+      setError('Invalid Email');
+      setIsUploaded(false);
+      return;
     }
 
     const updatedUser = {
@@ -115,24 +120,24 @@ const EditUser = (props) => {
     };
 
     axios
-      .put("http://localhost:5000/userManagement/update_user", updatedUser,{
-        withCredentials:true
+      .put('http://localhost:5000/userManagement/update_user', updatedUser, {
+        withCredentials: true,
       })
       .then((res) => {
         if (res.data.auth === false) {
-          setError("You Are not Authorized!");
+          setError('You Are not Authorized!');
           setIsUploaded(false);
           setTimeout(() => {
             dispatch(logout());
           }, 800);
         } else if (res.data.fetch === false) {
-          setError("Wrong Request");
+          setError('Wrong Request');
           setIsUploaded(false);
           setTimeout(() => {
             dispatch(logout());
           }, 800);
         } else if (res.data.updated === false) {
-          setError("No Updates");
+          setError('No Updates');
           setIsUploaded(false);
           setTimeout(() => {
             history.goBack();
@@ -152,7 +157,7 @@ const EditUser = (props) => {
   };
 
   const CancelHandler = () => {
-    history.replace("/user-report");
+    history.replace('/user-report');
   };
 
   const NameHandler = (event) => {
@@ -183,7 +188,7 @@ const EditUser = (props) => {
     setIsUploaded(true);
   };
   const onRedirect = () => {
-    history.replace("/user-report");
+    history.replace('/user-report');
   };
 
   return (
@@ -195,135 +200,135 @@ const EditUser = (props) => {
       <h2 className={classes.title}>EDIT USER</h2>
       <hr className={classes.line}></hr>
       <form className={classes.formContainer} onSubmit={updateHandler}>
-        <label for="userID" className={classes.lables}>
+        <label for='userID' className={classes.lables}>
           User ID :
         </label>
         <br />
         <input
           readOnly
-          type="text"
-          id="userID"
-          name="userID"
+          type='text'
+          id='userID'
+          name='userID'
           value={userID}
           className={classes.inputs}
         ></input>
-        <label for="email" className={classes.lables}>
+        <label for='email' className={classes.lables}>
           Email ID :
         </label>
         <br />
         <input
           onChange={EmailHandler}
-          type="email"
-          id="email"
-          name="userEmail"
+          type='email'
+          id='email'
+          name='userEmail'
           value={email}
           className={classes.inputs}
         ></input>
 
-        <label for="Uname" className={classes.lables}>
+        <label for='Uname' className={classes.lables}>
           Name :
         </label>
         <br />
         <input
           onChange={NameHandler}
-          type="text"
-          id="Uname"
-          name="userName"
+          type='text'
+          id='Uname'
+          name='userName'
           value={name}
           className={classes.inputs}
         ></input>
 
-        <label for="password" className={classes.lables}>
-          Password :
+        <label for='password' className={classes.lables}>
+          New Password :
         </label>
         <br />
         <input
           onChange={PasswordHandler}
-          type="text"
-          id="password"
-          name="password"
+          type='text'
+          id='password'
+          name='password'
           value={password}
           className={classes.inputs}
         ></input>
 
-        <label for="DOB" className={classes.lables}>
+        <label for='DOB' className={classes.lables}>
           Date of Birth :
         </label>
         <br />
         <input
           onChange={DOBHandler}
-          type="date"
-          id="DOB"
-          name="DOB"
+          type='date'
+          id='DOB'
+          name='DOB'
           value={dob}
           className={classes.inputs}
         ></input>
 
-        <label for="contactNo" className={classes.lables}>
+        <label for='contactNo' className={classes.lables}>
           Contact Number :
         </label>
         <br />
         <input
           onChange={ContactHandler}
-          type="number"
-          id="contactNo"
-          name="contactNo"
+          type='number'
+          id='contactNo'
+          name='contactNo'
           value={contact}
           className={classes.inputs}
         ></input>
 
-        <label for="address" className={classes.lables}>
+        <label for='address' className={classes.lables}>
           Address :
         </label>
         <br />
         <input
           onChange={AddressHandler}
-          id="address"
-          name="address"
+          id='address'
+          name='address'
           value={address}
           className={classes.inputs}
         ></input>
 
-        <label for="faculty" className={classes.lables}>
+        <label for='faculty' className={classes.lables}>
           Faculty :
         </label>
         <br />
         <select
-          id="faculty"
-          name="faculty"
+          id='faculty'
+          name='faculty'
           className={classes.select}
           onChange={FacultyHandler}
         >
-          <option selected="true" value={faculty} hidden>
+          <option selected='true' value={faculty} hidden>
             {faculty}
           </option>
-          <option value="Computing">Computing</option>
-          <option value="Enginnering">Enginnering</option>
-          <option value="Bussiness">Bussiness</option>
-          <option value="Humanities&Science">Humanities & Science</option>
+          <option value='Computing'>Computing</option>
+          <option value='Enginnering'>Enginnering</option>
+          <option value='Bussiness'>Bussiness</option>
+          <option value='Humanities&Science'>Humanities & Science</option>
         </select>
 
-        <label for="role" className={classes.lables}>
+        <label for='role' className={classes.lables}>
           Role :
         </label>
         <br />
         <select
-          id="role"
-          name="role"
+          id='role'
+          name='role'
           className={classes.select}
           onChange={RoleHandler}
         >
-          <option selected="true" value={role} hidden>
+          <option selected='true' value={role} hidden>
             {role}
           </option>
-          <option value="admin">admin</option>
-          <option value="lecturer">lecturer</option>
-          <option value="instructor">instructor</option>
-          <option value="student">student</option>
+          <option value='admin'>admin</option>
+          <option value='lecturer'>lecturer</option>
+          <option value='instructor'>instructor</option>
+          <option value='student'>student</option>
         </select>
 
         <div className={classes.inline}>
-          <button type="submit" className={classes.btnUpdate}>
+          <button type='submit' className={classes.btnUpdate}>
             UPDATE
           </button>
           <button className={classes.btnCancel} onClick={CancelHandler}>

@@ -1,14 +1,14 @@
-import classes from "./EditProfilepage.module.css";
-import { useState, useEffect } from "react";
-import axios from "axios";
-import { useSelector } from "react-redux";
-import profile1 from "../../../Assets/profile1.png";
-import { useDispatch } from "react-redux";
-import { logout } from "../../../Store/auth";
-import Deletepopup from "../../../Components/DeletePopup/DeletePopup";
-import ErrorPopup from "../../../Components/ErrorPopup/ErrorPopup";
-import { useHistory } from "react-router";
-import Success from "../../../Components/SuccessPopup/Success";
+import classes from './EditProfilepage.module.css';
+import { useState, useEffect } from 'react';
+import axios from 'axios';
+import { useSelector } from 'react-redux';
+import profile1 from '../../../Assets/profile1.png';
+import { useDispatch } from 'react-redux';
+import { logout } from '../../../Store/auth';
+import Deletepopup from '../../../Components/DeletePopup/DeletePopup';
+import ErrorPopup from '../../../Components/ErrorPopup/ErrorPopup';
+import { useHistory } from 'react-router';
+import Success from '../../../Components/SuccessPopup/Success';
 
 const EditProfile = () => {
   const [name, setname] = useState();
@@ -22,9 +22,9 @@ const EditProfile = () => {
   const [onDelete, setOnDelete] = useState(false);
   const [success, setSuccess] = useState(false);
   const [newpassword, setNewPassword] = useState();
-  const [fileName, setFile] = useState("");
-  const [btn, setBtn] = useState("SAVE CHANGES");
-  const [Filebtn, setFileBtn] = useState("SAVE IMAGE");
+  const [fileName, setFile] = useState('');
+  const [btn, setBtn] = useState('SAVE CHANGES');
+  const [Filebtn, setFileBtn] = useState('SAVE IMAGE');
 
   const userID = useSelector((state) => state.loging.userID);
   const token = useSelector((state) => state.loging.token);
@@ -32,14 +32,16 @@ const EditProfile = () => {
   const history = useHistory();
 
   useEffect(() => {
+    console.log('userid' + userID);
     axios
-      .get("http://localhost:5000/user/get_user?ID=" + userID, {
+      .get('http://localhost:5000/user/get_user?ID=' + userID, {
         withCredentials: true,
       })
       .then((res) => {
         if (res.data.auth === false) {
           dispatch(logout());
         } else if (res.data.fetch !== false) {
+          // } else if (true) {
           setname(res.data.name);
           setAddress(res.data.address);
           setContact(res.data.contact);
@@ -47,7 +49,7 @@ const EditProfile = () => {
           setDp(res.data.dp);
           setOldPassword(res.data.password);
         } else {
-          setError("No data available");
+          setError('No data available');
           setTimeout(() => {
             history.goBack();
           }, 1000);
@@ -67,7 +69,7 @@ const EditProfile = () => {
   const onDeleteBtn = () => {
     // setError(null)
     axios
-      .delete("http://localhost:5000/user/delete_user?ID", userID, {
+      .delete('http://localhost:5000/user/delete_user?ID', userID, {
         withCredentials: true,
       })
       .then((res) => {
@@ -76,7 +78,7 @@ const EditProfile = () => {
           window.location.reload();
         } else {
           setOnDelete(false);
-          setError("Unable to delete Account! try again");
+          setError('Unable to delete Account! try again');
         }
       })
       .catch((er) => {
@@ -118,23 +120,23 @@ const EditProfile = () => {
     const sanitizedbio = sanitizeInput(bio);
     // Input validation
     if (!sanitizedname.trim() || sanitizedname.length < 5) {
-      setError("invalid Name");
+      setError('invalid Name');
       return;
     } else if (!sanitizedcontact.trim() || sanitizedcontact.length !== 10) {
-      setError("Invalid Contact Number");
+      setError('Invalid Contact Number');
       return;
     } else if (password || newpassword) {
       password && password.trim();
       newpassword && newpassword.trim();
       if (password !== newpassword) {
-        setError("passwords does not match");
+        setError('passwords does not match');
         return;
       } else if (password.length < 6) {
-        setError("password length is not enough");
+        setError('password length is not enough');
         return;
       }
     }
-    setBtn("SAVING..");
+    setBtn('SAVING..');
     const data = {
       _id: userID,
       name: sanitizedname.trim(),
@@ -145,7 +147,7 @@ const EditProfile = () => {
     };
 
     axios
-      .post("http://localhost:5000/user/edit_user", data, {
+      .post('http://localhost:5000/user/edit_user', data, {
         withCredentials: true,
       })
       .then((res) => {
@@ -154,8 +156,8 @@ const EditProfile = () => {
         } else if (res.data.ack === true) {
           setSuccess(true);
         } else {
-          setBtn("SAVE CHANGES");
-          setError("Unable to update the details! try again.");
+          setBtn('SAVE CHANGES');
+          setError('Unable to update the details! try again.');
         }
       })
       .catch((er) => {
@@ -166,31 +168,31 @@ const EditProfile = () => {
     event.preventDefault();
 
     const dp = new FormData();
-    dp.append("dp", fileName);
-    dp.append("_id", userID);
+    dp.append('dp', fileName);
+    dp.append('_id', userID);
 
-    setFileBtn("SAVING...");
+    setFileBtn('SAVING...');
     axios
-      .post("http://localhost:5000/user/add_dp", dp, {
+      .post('http://localhost:5000/user/add_dp', dp, {
         withCredentials: true,
       })
       .then((res) => {
         if (res.data.auth === false) {
           dispatch(logout());
         } else if (res.data.file === false) {
-          setError("Invalid file type!");
-          setFileBtn("SAVE IMAGE");
+          setError('Invalid file type!');
+          setFileBtn('SAVE IMAGE');
           // window.location.reload();
         } else if (res.data.ack === false) {
-          setFileBtn("SAVE IMAGE");
-          setError("Unable to save changes! try again.");
+          setFileBtn('SAVE IMAGE');
+          setError('Unable to save changes! try again.');
           // window.location.reload();
         } else {
           setSuccess(true);
         }
       })
       .catch((er) => {
-        setError("Some error occured! try again.");
+        setError('Some error occured! try again.');
       });
   };
 
@@ -200,11 +202,11 @@ const EditProfile = () => {
   // Output Sanitizes function
   const sanitizeInput = (input) => {
     return input
-      .replace(/&/g, "&amp;")
-      .replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;")
-      .replace(/"/g, "&quot;")
-      .replace(/'/g, "&#39;");
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
   };
   return (
     <div className={classes.container}>
@@ -212,7 +214,7 @@ const EditProfile = () => {
       {onDelete && <Deletepopup hide={hide} onDelete={onDeleteBtn} />}
       {success && <Success redirect={onRedirect} />}
       <form className={classes.form_container} onSubmit={editHandler}>
-        <label htmlFor="username" className={classes.labels}>
+        <label htmlFor='username' className={classes.labels}>
           User Name
         </label>
         <br />
@@ -221,12 +223,12 @@ const EditProfile = () => {
           value={name}
           onChange={usernamehandler}
           className={classes.inputs}
-          id="username"
-          name="username"
-          type="text"
+          id='username'
+          name='username'
+          type='text'
         ></input>
 
-        <label htmlFor="address" className={classes.labels}>
+        <label htmlFor='address' className={classes.labels}>
           Address
         </label>
         <br />
@@ -234,12 +236,12 @@ const EditProfile = () => {
           value={address}
           onChange={addressHandler}
           className={classes.inputs}
-          id="address"
-          name="address"
-          type="text"
+          id='address'
+          name='address'
+          type='text'
         ></input>
 
-        <label htmlFor="phonenumber" className={classes.labels}>
+        <label htmlFor='phonenumber' className={classes.labels}>
           Contact Number
         </label>
         <br />
@@ -248,26 +250,26 @@ const EditProfile = () => {
           value={contact}
           onChange={phonenumberhandler}
           className={classes.inputs}
-          name="phonenumber"
-          id="phonenumber"
-          type="tel"
-          pattern="+94[7-9]{2}-[0-9]{3}-[0-9]{4}"
+          name='phonenumber'
+          id='phonenumber'
+          type='tel'
+          pattern='+94[7-9]{2}-[0-9]{3}-[0-9]{4}'
         ></input>
 
-        <label htmlFor="aboutme" className={classes.labels}>
+        <label htmlFor='aboutme' className={classes.labels}>
           About Me
         </label>
         <br />
         <textarea
-          row="10"
+          row='10'
           className={classes.textA}
-          id="aboutme"
-          name="aboutme"
-          type="textarea"
+          id='aboutme'
+          name='aboutme'
+          type='textarea'
           value={bio}
           onChange={bioHandler}
         ></textarea>
-        <label htmlFor="password" className={classes.labels}>
+        <label htmlFor='password' className={classes.labels}>
           New Password
         </label>
         <br />
@@ -275,12 +277,12 @@ const EditProfile = () => {
           value={password}
           onChange={passwordhandler}
           className={classes.inputs}
-          name="password"
-          id="password"
-          type="password"
+          name='password'
+          id='password'
+          type='password'
         ></input>
         <br />
-        <label htmlFor="Npassword" className={classes.labels}>
+        <label htmlFor='Npassword' className={classes.labels}>
           Re-Type Password
         </label>
         <br />
@@ -288,47 +290,47 @@ const EditProfile = () => {
           value={newpassword}
           onChange={newpasswordhandler}
           className={classes.inputs}
-          name="password"
-          id="Npassword"
-          type="password"
+          name='password'
+          id='Npassword'
+          type='password'
         ></input>
         <br />
 
-        <button type="submit" className={classes.submit}>
+        <button type='submit' className={classes.submit}>
           {btn}
         </button>
       </form>
 
-      <form enctype="multipart/form-data" onSubmit={dpHandler}>
+      <form enctype='multipart/form-data' onSubmit={dpHandler}>
         <hr className={classes.line}></hr>
         <div>
           <img className={classes.dp} src={dp ? dp : profile1} />
           <br></br>
           <div className={classes.change}>
-            <label htmlFor="img">Change Photo</label>
+            <label htmlFor='img'>Change Photo</label>
           </div>
         </div>
 
-        <label htmlFor="img">
+        <label htmlFor='img'>
           <div className={classes.drop}>
             <div className={classes.dash}>Drag And Drop</div>
             <input
               onChange={fileHandler}
               required
               className={classes.dashinput}
-              id="img"
-              type="file"
+              id='img'
+              type='file'
             />
           </div>
         </label>
 
         <br />
-        <button type="submit" className={classes.submit}>
+        <button type='submit' className={classes.submit}>
           {Filebtn}
         </button>
       </form>
       <hr className={classes.line}></hr>
-      <button onClick={deleteHandler} type="submit" className={classes.delete}>
+      <button onClick={deleteHandler} type='submit' className={classes.delete}>
         Delete Account
       </button>
     </div>
