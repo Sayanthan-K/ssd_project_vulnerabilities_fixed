@@ -47,15 +47,10 @@ const EnrolledCourses = () => {
 
         }
         if(er.message==="Request failed with status code 400"){ // soultion for unvalidated redirects
-
           setAlertMessage("You tried to access invalid or unauthorized destination")
-
           console.log(alertMessage)
-
           setSeverity('info')
-
           setOpenSnackbar(true)
-
           history.replace("/dashboard");
 
         }
