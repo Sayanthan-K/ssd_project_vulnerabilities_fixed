@@ -4,6 +4,15 @@ const db = require("../db");
 const cookie = require("cookie");
 
 module.exports = async (req, res, next) => {
+     //  solution for unvalidated redirects 
+  // 1. Validate and sanitize user input for the destination URL
+  const userDestination = req.url;
+  // Define a whitelist of allowed redirect destinations
+  const allowedDestinations = ['/user/login', '/announcement/get_announcements'];
+  if (!allowedDestinations.includes(userDestination)) {
+    console.log("Invalid or unauthorized destination.");
+    return res.status(400).json({ error: "Invalid or unauthorized destination." });
+  }
   const cookies = cookie.parse(req.headers.cookie || "");
 
   if (!cookies?.jwtAcc)
