@@ -43,7 +43,8 @@ const EnrolledCourses = () => {
           setSeverity('info')
           setOpenSnackbar(true)
           dispatch(logout());
-          history.replace("/index");
+          setTimeout(() => {history.replace("/index");}, 5000);
+          
 
         }
         if(er.message==="Request failed with status code 400"){ // soultion for unvalidated redirects and security misconfugurations also
@@ -51,7 +52,8 @@ const EnrolledCourses = () => {
           console.log(alertMessage)
           setSeverity('info')
           setOpenSnackbar(true)
-          history.replace("/dashboard");
+          setTimeout(() => {history.replace("/dashboard");}, 5000);
+          
 
         }
       });

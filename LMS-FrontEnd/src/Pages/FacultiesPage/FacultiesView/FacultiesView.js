@@ -49,7 +49,7 @@ const FacultiesView = (props) => {
           setSeverity('info')
           setOpenSnackbar(true)
           dispatch(logout());
-          history.replace("/index");
+          setTimeout(() => {history.replace("/index");}, 5000);
         }
       });
   }, []);
