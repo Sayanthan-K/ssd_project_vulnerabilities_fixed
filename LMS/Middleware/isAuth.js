@@ -2,17 +2,18 @@ const jwt = require("jsonwebtoken");
 const mongodb = require("mongodb");
 const db = require("../db");
 const cookie = require("cookie");
+const useragent = require('useragent');
 
 module.exports = async (req, res, next) => {
      //  solution for unvalidated redirects 
   // 1. Validate and sanitize user input for the destination URL
-  const userDestination = req.url;
-  // Define a whitelist of allowed redirect destinations
-  const allowedDestinations = ['/user/login', '/announcement/get_announcements'];
-  if (!allowedDestinations.includes(userDestination)) {
-    console.log("Invalid or unauthorized destination.");
-    return res.status(400).json({ error: "Invalid or unauthorized destination." });
-  }
+  // const userDestination = req.url;
+  // // Define a whitelist of allowed redirect destinations
+  // const allowedDestinations = ['/user/login', '/announcement/get_announcements'];
+  // if (!allowedDestinations.includes(userDestination)) {
+  //   console.log("Invalid or unauthorized destination.");
+  //   return res.status(400).json({ error: "Invalid or unauthorized destination." });
+  // }
   const cookies = cookie.parse(req.headers.cookie || "");
 
   if (!cookies?.jwtAcc)
@@ -27,6 +28,22 @@ module.exports = async (req, res, next) => {
   try {
     const decoded = jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET);
     UID = decoded.userID;
+
+    const userAgentHeader = req.headers['user-agent'];
+    const agent = useragent.parse(userAgentHeader);
+    const browserVersion = agent.toVersion();
+    const browserFamily = agent.family;
+    const os = agent.os.family;
+    const osVersion = agent.os.toVersion();
+
+    if (decoded.browserVersion !== browserVersion
+       || decoded.browserFamily !== browserFamily 
+       ||decoded.os !==os || decoded.osVersion !== osVersion) {
+        console.log("session may be hijacked")
+        res.clearCookie('jwt', { httpOnly: true, sameSite: 'strict', secure: true })
+        res.clearCookie('jwtAcc', { httpOnly: true, sameSite: 'strict', secure: true })
+      return res.status(401).json({ message: "somwthing went wrong" });
+    }
   } catch (err) {
     console.log(err.message);
 
