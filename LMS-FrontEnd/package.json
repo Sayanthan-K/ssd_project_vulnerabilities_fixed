@@ -12,7 +12,7 @@
     "@testing-library/user-event": "^12.8.3",
     "axios": "^0.21.1",
     "axois": "^0.0.1-security",
-    "bootstrap": "^5.1.0",
+    "bootstrap": "^5.3.1",
     "jspdf": "^2.4.0",
     "jspdf-autotable": "^3.5.20",
     "ka-table": "^7.1.3",
