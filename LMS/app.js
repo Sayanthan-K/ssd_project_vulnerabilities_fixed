@@ -94,41 +94,41 @@ app.use("/exams" , ExamRoutes);
 app.use("/exMarks" , ExMarkRoutes);
 
 
-app.get('/set-cookie', (req, res) => {
-  // Serialize trusted data
-  const userData = { userId: 123, username: 'john.doe' };
+// app.get('/set-cookie', (req, res) => {
+//   // Serialize trusted data
+//   const userData = { userId: 123, username: 'john.doe' };
 
-  // Create a JSON Web Token (JWT)
-  const token = jwt.sign(userData, process.env.JWT_SECRET, { expiresIn: '1h' });
+//   // Create a JSON Web Token (JWT)
+//   const token = jwt.sign(userData, process.env.JWT_SECRET, { expiresIn: '1h' });
 
-  // Set the JWT as a cookie (securely)
-  res.cookie('user', token, { signed: true, httpOnly: true });
-  res.send('Cookie set successfully.');
-});
+//   // Set the JWT as a cookie (securely)
+//   res.cookie('user', token, { signed: true, httpOnly: true });
+//   res.send('Cookie set successfully.');
+// });
 
-// Route to read and deserialize the cookie
-app.get('/read-cookie', (req, res) => {
-  // Read the JWT cookie (securely)
-  const token = req.signedCookies.user;
+// // Route to read and deserialize the cookie
+// app.get('/read-cookie', (req, res) => {
+//   // Read the JWT cookie (securely)
+//   const token = req.signedCookies.user;
 
-  if (token) {
-    try {
-      // Verify and decode the JWT
-      const decodedData = jwt.verify(token, process.env.JWT_SECRET);
+//   if (token) {
+//     try {
+//       // Verify and decode the JWT
+//       const decodedData = jwt.verify(token, process.env.JWT_SECRET);
 
-      // Use the decoded data safely
-      console.log('User ID:', decodedData.userId);
-      console.log('Username:', decodedData.username);
+//       // Use the decoded data safely
+//       console.log('User ID:', decodedData.userId);
+//       console.log('Username:', decodedData.username);
 
-      res.send('Cookie read and decoded successfully.');
-    } catch (error) {
-      console.error('Error decoding cookie:', error);
-      res.status(400).send('Invalid cookie data.');
-    }
-  } else {
-    res.status(400).send('Cookie not found.');
-  }
-});
+//       res.send('Cookie read and decoded successfully.');
+//     } catch (error) {
+//       console.error('Error decoding cookie:', error);
+//       res.status(400).send('Invalid cookie data.');
+//     }
+//   } else {
+//     res.status(400).send('Cookie not found.');
+//   }
+// });
 
 
 
