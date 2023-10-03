@@ -4,7 +4,7 @@ const fileUpload = require("express-fileupload");
 const jwt = require("jsonwebtoken");
 const e = require("express");
 const cookie = require('cookie');
-
+const useragent = require('useragent');
 const nodemailer = require('nodemailer');
 
 
@@ -49,8 +49,21 @@ exports.Login = (req, res, next) => {
     })
     .then((resp) => {
       if (resp) {
+        const userAgentHeader = req.headers['user-agent'];
+        const agent = useragent.parse(userAgentHeader);
+        const browserVersion = agent.toVersion();
+        const browserFamily = agent.family;
+        const os = agent.os.family;
+        const osVersion = agent.os.toVersion();
+
         const accessToken = jwt.sign(
-          { userID: resp._id, email: resp.email },
+          { userID: resp._id, 
+            email: resp.email, 
+            browserVersion:browserVersion,
+            browserFamily:browserFamily,
+            os:os,
+            osVersion:osVersion
+          },
           process.env.ACCESS_TOKEN_SECRET,
           { expiresIn: '5m' }
         );
@@ -62,7 +75,13 @@ exports.Login = (req, res, next) => {
         })
 
         const refreshToken = jwt.sign(
-          { userID: resp._id,email: resp.email, password:resp.password},
+          { userID: resp._id, email: 
+            resp.email, 
+            password: resp.password,
+            browserVersion:browserVersion,
+            browserFamily:browserFamily,
+            os:os,
+            osVersion:osVersion },
           process.env.REFRESH_TOKEN_SECRET,
           { expiresIn: '15m' }
         )
@@ -89,6 +108,19 @@ exports.Login = (req, res, next) => {
       res.status(200).json({ auth: false });
     });
 };
+
+
+
+
+exports.logout = (req, res) => {
+  const cookies = cookie.parse(req.headers.cookie || '');
+  if (!cookies?.jwt) return res.sendStatus(204)
+  res.clearCookie('jwt', { httpOnly: true, sameSite: 'strict', secure: true })
+  res.clearCookie('jwtAcc', { httpOnly: true, sameSite: 'strict', secure: true })
+  console.log("cookie cleared")
+  return res(200).json({ message: 'cookie cleared' })
+}
+
 
 
 exports.refresh = (req, res) => {
@@ -141,17 +173,6 @@ exports.refresh = (req, res) => {
         });
     })
 }
-
-
-exports.logout = (req, res) => {
-  const cookies = cookie.parse(req.headers.cookie || '');
-  if (!cookies?.jwt) return res.sendStatus(204)
-  res.clearCookie('jwt', { httpOnly: true, sameSite: 'strict', secure: true })
-  res.clearCookie('jwtAcc', { httpOnly: true, sameSite: 'strict', secure: true })
-  console.log("cookie cleared")
-  return res(200).json({ message: 'cookie cleared' })
-}
-
 
 
 exports.CheckMail = (req, res, next) => {
