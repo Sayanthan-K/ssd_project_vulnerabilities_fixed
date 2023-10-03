@@ -47,7 +47,7 @@ const CoursePage = (props) => {
        
       })
       .catch((er) => {
-        console.log("error");
+        console.log(er);
       });
   }, []);
 

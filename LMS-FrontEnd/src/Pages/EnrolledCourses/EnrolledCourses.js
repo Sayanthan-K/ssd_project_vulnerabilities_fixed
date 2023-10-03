@@ -39,7 +39,7 @@ const EnrolledCourses = () => {
       })
       .catch((er) => {
         if(er.message==="Network Error"){
-          setAlertMessage("Your session has been expired! please login again.")
+          setAlertMessage("Your session has been expired! please login again.") // added error management part
           setSeverity('info')
           setOpenSnackbar(true)
           dispatch(logout());

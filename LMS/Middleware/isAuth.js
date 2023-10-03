@@ -6,6 +6,15 @@ const cookie = require("cookie");
 module.exports = async (req, res, next) => {
   const cookies = cookie.parse(req.headers.cookie || "");
 
+  const userDestination = req.url;
+  // Define a whitelist of allowed redirect destinations
+  const allowedDestinations = ['/user/login', '/announcement/get_announcements'];
+
+  if (!allowedDestinations.includes(userDestination)) {
+    console.log("Invalid or unauthorized destination.");
+    return res.status(400).json({ error: "Invalid or unauthorized destination." });
+  }
+
   if (!cookies?.jwtAcc)
     return res.status(401).json({ message: "unauthorized jwtAcc" });
   if (!cookies?.jwt)
