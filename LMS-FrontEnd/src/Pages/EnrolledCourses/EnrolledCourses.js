@@ -46,7 +46,7 @@ const EnrolledCourses = () => {
           history.replace("/index");
 
         }
-        if(er.message==="Request failed with status code 400"){ // soultion for unvalidated redirects
+        if(er.message==="Request failed with status code 400"){ // soultion for unvalidated redirects and security misconfugurations also
           setAlertMessage("You tried to access invalid or unauthorized destination")
           console.log(alertMessage)
           setSeverity('info')
