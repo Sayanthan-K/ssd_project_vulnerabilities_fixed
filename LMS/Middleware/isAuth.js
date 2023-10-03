@@ -5,11 +5,13 @@ const cookie = require("cookie");
 const useragent = require('useragent');
 
 module.exports = async (req, res, next) => {
-     //  solution for unvalidated redirects 
+      // solution for unvalidated redirects 
   // 1. Validate and sanitize user input for the destination URL
+
+
   // const userDestination = req.url;
   // // Define a whitelist of allowed redirect destinations
-  // const allowedDestinations = ['/user/login', '/announcement/get_announcements'];
+  // const allowedDestinations = ['/user/login', '/announcement/get_announcements','/Faculty/get_faculties'];
   // if (!allowedDestinations.includes(userDestination)) {
   //   console.log("Invalid or unauthorized destination.");
   //   return res.status(400).json({ error: "Invalid or unauthorized destination." });
@@ -52,7 +54,7 @@ module.exports = async (req, res, next) => {
         "AcessToken has been expired. it is getting refresh. please wait!"
       );
       if (!cookies?.jwt)
-        return res.status(401).json({ message: "unauthorized 1" });
+        return res.status(401).json({ message: "unauthorized" });
 
       const refreshToken = cookies.jwt;
 
@@ -69,9 +71,15 @@ module.exports = async (req, res, next) => {
         if (resp) {
           UID = resp._id;
           const newAccessToken = jwt.sign(
-            { userID: resp._id, email: resp.email },
+            { userID: resp._id, 
+              email: resp.email, 
+              browserVersion:browserVersion,
+              browserFamily:browserFamily,
+              os:os,
+              osVersion:osVersion
+            },
             process.env.ACCESS_TOKEN_SECRET,
-            { expiresIn: "45m" }
+            { expiresIn: "1m" }
           );
           res.cookie("jwtAcc", newAccessToken, {
             httpOnly: true,

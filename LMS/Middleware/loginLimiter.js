@@ -3,7 +3,7 @@ const {logEvents} = require("./logger")
 
 const loginLimiter = rateLimit({
   windowMs: 60*1000,// 1 min
-  max:10,
+  max:3,
   message:
   {message:'Too many login attemps for this IP, please try again after a 60 seconds pause'},
   handler:(req,res,next,options) =>{

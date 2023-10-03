@@ -65,7 +65,7 @@ exports.Login = (req, res, next) => {
             osVersion:osVersion
           },
           process.env.ACCESS_TOKEN_SECRET,
-          { expiresIn: '5m' }
+          { expiresIn: '1m' }
         );
         res.cookie('jwtAcc', accessToken, {
           httpOnly: true,
@@ -83,7 +83,7 @@ exports.Login = (req, res, next) => {
             os:os,
             osVersion:osVersion },
           process.env.REFRESH_TOKEN_SECRET,
-          { expiresIn: '15m' }
+          { expiresIn: '7m' }
         )
 
         res.cookie('jwt', refreshToken, {
