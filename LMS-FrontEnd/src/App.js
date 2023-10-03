@@ -258,7 +258,9 @@ function App() {
               path="/dashboard/new_announcement"
               exact
               component={NewAnnouncement}
-            />
+            >
+              {type !== "admin" && <Redirect to="/dashboard" />}
+            </Route>
 
             <Route
               path="/dashboard/edit_announcement/:annID"
@@ -283,12 +285,15 @@ function App() {
               path="/my-courses/add-forum/:week"
               exact
               component={AddForum}
-            />
+            >
+              {type !== "admin" && <Redirect to="/dashboard" />}
+            </Route>
             <Route
               path="/forum/:moduleID/:weekID/:forumID"
               exact
               component={ForumView}
             />
+
             <Route path="/weekforum" exact component={WeekForumView} />
 
             <Route path="*" component={page404} />
